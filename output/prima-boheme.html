@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prima Bohème — Pizzeria · L'Union · Toulouse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Tokens ─────────────────────────────────── */
+    :root {
+      --amber:      #E8B400;
+      --amber-d:    #C89600;
+      --amber-l:    #F7D96A;
+      --amber-pale: #FFF8D6;
+      --terra:      #C84B1E;
+      --terra-l:    #E06030;
+      --teal:       #1A9B8A;
+      --teal-l:     #26B5A2;
+      --blue:       #1E3BA3;
+      --cream:      #FFFAEF;
+      --cream-w:    #FFF5DC;
+      --dark:       #1C0A04;
+      --dark-mid:   #3D1A08;
+      --muted:      #8A6A50;
+      --border:     #ECD8A8;
+
+      --font-logo:  'Pacifico', cursive;
+      --font-head:  'Cormorant Garamond', serif;
+      --font-body:  'DM Sans', sans-serif;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* ─── Reset ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: var(--font-body); background: var(--cream); color: var(--dark); overflow-x: hidden; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; cursor: pointer; }
+    button { font-family: var(--font-body); cursor: pointer; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+
+    /* ─── Keyframes ──────────────────────────────── */
+    @keyframes float-slow {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-22px) rotate(3deg); }
+    }
+    @keyframes blob {
+      0%,100% { border-radius: 62% 38% 46% 54% / 60% 44% 56% 40%; }
+      33%      { border-radius: 44% 56% 66% 34% / 46% 62% 38% 54%; }
+      66%      { border-radius: 54% 46% 34% 66% / 38% 50% 50% 62%; }
+    }
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(48px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes pulse-ring {
+      0%   { transform: scale(1); opacity: .7; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    @keyframes slide-in-left {
+      from { opacity: 0; transform: translateX(-60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slide-in-right {
+      from { opacity: 0; transform: translateX(60px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes scale-in {
+      from { opacity: 0; transform: scale(.88); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ─── Nav ────────────────────────────────────── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 0 40px;
+      transition: background .35s ease, box-shadow .35s ease, padding .35s ease;
+    }
+    .nav.solid {
+      background: rgba(255,250,239,.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 1px 0 var(--border);
+      padding: 0 40px;
+    }
+    .nav-inner {
+      max-width: 1260px; margin: 0 auto;
+      height: 76px; display: flex; align-items: center; justify-content: space-between;
+    }
+    /* Logo */
+    .nav-logo { display: flex; flex-direction: column; align-items: center; gap: 0; line-height: 1; }
+    .nav-logo-prima {
+      font-family: var(--font-body); font-size: 10px; font-weight: 600;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: rgba(255,255,255,.9); transition: color .3s;
+    }
+    .nav.solid .nav-logo-prima { color: var(--terra); }
+    .nav-logo-boheme {
+      font-family: var(--font-logo); font-size: 28px;
+      color: white; transition: color .3s;
+    }
+    .nav.solid .nav-logo-boheme { color: var(--dark); }
+
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; letter-spacing: .04em;
+      color: rgba(255,255,255,.88); transition: color .25s;
+    }
+    .nav.solid .nav-links a { color: var(--dark-mid); }
+    .nav-links a:hover { color: var(--amber) !important; }
+
+    .nav-btn {
+      background: var(--amber); color: var(--dark) !important;
+      padding: 10px 24px; border-radius: 99px; font-weight: 600 !important;
+      transition: background .25s, transform .2s, box-shadow .2s !important;
+      box-shadow: 0 4px 14px rgba(232,180,0,.35);
+    }
+    .nav-btn:hover {
+      background: var(--amber-d) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 20px rgba(232,180,0,.45) !important;
+    }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; padding: 8px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: white; border-radius: 2px; transition: background .3s;
+    }
+    .nav.solid .hamburger span { background: var(--dark); }
+
+    /* Mobile overlay */
+    .mobile-nav {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: var(--dark); flex-direction: column;
+      align-items: center; justify-content: center; gap: 36px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { font-family: var(--font-logo); font-size: 32px; color: var(--cream); }
+    .mobile-nav a:hover { color: var(--amber); }
+    .mobile-close {
+      position: absolute; top: 24px; right: 28px;
+      background: none; border: none; color: white; font-size: 36px; line-height: 1;
+    }
+
+    /* ─── Hero ───────────────────────────────────── */
+    .hero {
+      position: relative; min-height: 100dvh;
+      display: flex; align-items: center; overflow: hidden;
+    }
+    .hero-parallax {
+      position: absolute; inset: -10% 0;
+      background:
+        linear-gradient(160deg,rgba(28,10,4,.68) 0%,rgba(200,75,30,.28) 55%,rgba(28,10,4,.78) 100%),
+        url('https://boheme.primafamily.fr/assets/img/home.webp') center/cover no-repeat;
+      will-change: transform;
+    }
+    /* Animated blobs */
+    .hero-blob {
+      position: absolute; pointer-events: none;
+      animation: blob 9s ease-in-out infinite, float-slow 7s ease-in-out infinite;
+    }
+    .hero-blob-1 {
+      width: 340px; height: 340px; top: 8%; right: 6%;
+      background: rgba(232,180,0,.18); animation-delay: 0s, .5s;
+    }
+    .hero-blob-2 {
+      width: 200px; height: 200px; bottom: 15%; left: 4%;
+      background: rgba(26,155,138,.14); animation-delay: 3s, 1.2s;
+    }
+    .hero-blob-3 {
+      width: 140px; height: 140px; top: 30%; left: 12%;
+      background: rgba(200,75,30,.16); animation-delay: 5s, 2s;
+    }
+
+    /* Rotating ring */
+    .hero-ring {
+      position: absolute; bottom: 80px; right: 80px;
+      width: 120px; height: 120px; pointer-events: none;
+      animation: spin-slow 20s linear infinite;
+    }
+
+    .hero-content {
+      position: relative; z-index: 2; width: 100%;
+      max-width: 1260px; margin: 0 auto;
+      padding: 140px 40px 80px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(232,180,0,.18); border: 1px solid rgba(232,180,0,.35);
+      backdrop-filter: blur(10px); border-radius: 99px;
+      padding: 7px 18px; margin-bottom: 24px;
+      font-size: 12px; font-weight: 600; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--amber-l);
+      animation: fade-up .8s var(--ease-out) .1s both;
+    }
+    .hero-dot {
+      width: 6px; height: 6px; background: var(--amber);
+      border-radius: 50%; animation: pulse-ring 1.6s ease-out infinite;
+    }
+    .hero-title {
+      font-family: var(--font-logo); font-size: clamp(56px, 9vw, 110px);
+      line-height: .95; color: white; margin-bottom: 12px;
+      animation: fade-up .9s var(--ease-out) .25s both;
+    }
+    .hero-title span { color: var(--amber-l); }
+    .hero-sub {
+      font-family: var(--font-head); font-style: italic; font-size: clamp(18px,2.4vw,28px);
+      color: rgba(255,255,255,.75); margin-bottom: 40px; max-width: 560px;
+      animation: fade-up .9s var(--ease-out) .4s both;
+    }
+    .hero-actions {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      animation: fade-up .9s var(--ease-out) .55s both;
+    }
+    .btn-amber {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--amber); color: var(--dark);
+      font-size: 15px; font-weight: 600; padding: 16px 32px;
+      border-radius: 99px; border: none;
+      box-shadow: 0 6px 24px rgba(232,180,0,.4);
+      transition: background .22s, transform .22s var(--ease-spring), box-shadow .22s;
+    }
+    .btn-amber:hover {
+      background: var(--amber-d); transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 32px rgba(232,180,0,.5);
+    }
+    .btn-amber:focus-visible { outline: 3px solid white; outline-offset: 3px; }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: transparent; color: white;
+      font-family: var(--font-body); font-size: 15px; font-weight: 500;
+      padding: 15px 30px; border-radius: 99px;
+      border: 1.5px solid rgba(255,255,255,.4);
+      transition: background .22s, border-color .22s, transform .22s var(--ease-spring);
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.8);
+      transform: translateY(-3px);
+    }
+    .btn-ghost:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+
+    /* Hero scroll cue */
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      animation: fade-up 1s var(--ease-out) 1s both;
+    }
+    .hero-scroll span {
+      font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+    }
+    .scroll-line {
+      width: 1px; height: 44px; background: rgba(255,255,255,.25);
+      position: relative; overflow: hidden; border-radius: 1px;
+    }
+    .scroll-line::after {
+      content: ''; position: absolute; top: -100%; left: 0; right: 0;
+      height: 100%; background: var(--amber);
+      animation: scroll-drop 1.8s ease-in-out infinite;
+    }
+    @keyframes scroll-drop { 0%{top:-100%} 60%,100%{top:100%} }
+
+    /* Wave bottom */
+    .hero-wave { position: absolute; bottom: -1px; left: 0; right: 0; }
+
+    /* ─── Marquee ─────────────────────────────────── */
+    .marquee-strip {
+      background: var(--amber); overflow: hidden;
+      padding: 14px 0; position: relative; z-index: 1;
+    }
+    .marquee-track {
+      display: flex; width: max-content;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-strip:hover .marquee-track { animation-play-state: paused; }
+    .marquee-item {
+      font-family: var(--font-logo); font-size: 18px; color: var(--dark);
+      white-space: nowrap; padding: 0 28px; display: flex; align-items: center; gap: 28px;
+    }
+    .marquee-item::after {
+      content: '✦'; font-size: 12px; color: var(--terra);
+    }
+
+    /* ─── Shared layout ───────────────────────────── */
+    .container { max-width: 1260px; margin: 0 auto; padding: 0 40px; }
+    .section { padding: 100px 0; }
+    .label {
+      font-family: var(--font-body); font-size: 11px; font-weight: 600;
+      letter-spacing: .22em; text-transform: uppercase; color: var(--terra);
+      margin-bottom: 12px;
+    }
+    .label-amber { color: var(--amber); }
+    .h2 {
+      font-family: var(--font-head); font-size: clamp(32px,4.5vw,56px);
+      font-weight: 600; line-height: 1.12; color: var(--dark);
+    }
+    .h2-white { color: white; }
+    .italic-sub {
+      font-family: var(--font-head); font-style: italic;
+      font-size: clamp(16px,1.8vw,20px); color: var(--muted); margin-top: 12px;
+    }
+
+    /* Scroll reveals */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); }
+    .reveal.vis { opacity: 1; transform: translateY(0); }
+    .reveal-left  { opacity: 0; transform: translateX(-50px); transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); }
+    .reveal-right { opacity: 0; transform: translateX(50px);  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); }
+    .reveal-left.vis, .reveal-right.vis { opacity: 1; transform: translateX(0); }
+    .delay-1 { transition-delay: .1s; }
+    .delay-2 { transition-delay: .2s; }
+    .delay-3 { transition-delay: .3s; }
+    .delay-4 { transition-delay: .4s; }
+    .delay-5 { transition-delay: .5s; }
+
+    /* ─── Esprit section ──────────────────────────── */
+    .esprit { background: var(--cream); position: relative; overflow: hidden; }
+    .esprit-bg-blob {
+      position: absolute; top: -80px; right: -120px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,180,0,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .esprit-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .esprit-images { position: relative; height: 560px; }
+    .esprit-img-main {
+      position: absolute; top: 0; left: 0; width: 68%; height: 82%;
+      object-fit: cover; border-radius: 24px;
+      box-shadow: 0 32px 72px rgba(28,10,4,.2);
+      transition: transform .5s var(--ease-out);
+    }
+    .esprit-img-main:hover { transform: scale(1.02) rotate(-.5deg); }
+    .esprit-img-accent {
+      position: absolute; bottom: 0; right: 0; width: 55%; height: 55%;
+      object-fit: cover; border-radius: 16px; border: 5px solid var(--cream);
+      box-shadow: 0 20px 48px rgba(28,10,4,.18);
+      transition: transform .5s var(--ease-out);
+    }
+    .esprit-img-accent:hover { transform: scale(1.03) rotate(.5deg); }
+    .esprit-badge {
+      position: absolute; top: 46%; right: 14%;
+      background: var(--amber); border-radius: 50%;
+      width: 100px; height: 100px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: var(--font-logo); font-size: 13px; color: var(--dark);
+      text-align: center; line-height: 1.2;
+      box-shadow: 0 8px 28px rgba(232,180,0,.5);
+      animation: float-slow 6s ease-in-out infinite;
+      z-index: 3;
+    }
+    .esprit-badge small { font-family: var(--font-body); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; opacity: .8; }
+
+    .esprit-pills {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px;
+    }
+    .pill {
+      background: var(--cream-w); border: 1.5px solid var(--border);
+      border-radius: 99px; padding: 8px 18px;
+      font-size: 13px; font-weight: 500; color: var(--dark-mid);
+      display: flex; align-items: center; gap: 7px;
+      transition: background .2s, border-color .2s, transform .2s var(--ease-spring);
+    }
+    .pill:hover { background: var(--amber-pale); border-color: var(--amber); transform: scale(1.04); }
+    .pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ─── Dark band ───────────────────────────────── */
+    .band-dark {
+      background: var(--dark); padding: 72px 0; position: relative; overflow: hidden;
+    }
+    .band-dark-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: rgba(255,255,255,.1);
+    }
+    .band-stat {
+      background: var(--dark); padding: 40px 32px; text-align: center;
+      transition: background .25s;
+    }
+    .band-stat:hover { background: var(--dark-mid); }
+    .band-stat-num {
+      font-family: var(--font-logo); font-size: 52px; color: var(--amber);
+      line-height: 1;
+    }
+    .band-stat-label {
+      font-size: 13px; color: rgba(255,255,255,.55); margin-top: 8px;
+      letter-spacing: .06em;
+    }
+
+    /* ─── Carte (menu) ────────────────────────────── */
+    .carte { background: var(--cream-w); position: relative; overflow: hidden; }
+    .carte::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+      background: linear-gradient(90deg, var(--terra), var(--amber), var(--teal));
+    }
+    .carte-header { text-align: center; margin-bottom: 48px; }
+    .carte-tabs {
+      display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 52px;
+    }
+    .tab-btn {
+      background: white; border: 1.5px solid var(--border);
+      color: var(--muted); font-size: 14px; font-weight: 500;
+      padding: 10px 26px; border-radius: 99px;
+      transition: all .25s var(--ease-spring);
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--amber); border-color: var(--amber);
+      color: var(--dark); transform: scale(1.05);
+      box-shadow: 0 4px 16px rgba(232,180,0,.3);
+    }
+    .tab-btn:focus-visible { outline: 3px solid var(--terra); outline-offset: 3px; }
+
+    .menu-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+    .menu-panel { display: none; }
+    .menu-panel.active { display: contents; }
+
+    .dish {
+      background: white; border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform .3s var(--ease-spring), box-shadow .3s;
+      position: relative;
+    }
+    .dish:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 24px 56px rgba(28,10,4,.12); }
+    .dish-img { position: relative; height: 220px; overflow: hidden; }
+    .dish-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
+    .dish:hover .dish-img img { transform: scale(1.08); }
+    .dish-tag {
+      position: absolute; top: 14px; left: 14px;
+      background: var(--amber); color: var(--dark);
+      font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 99px;
+    }
+    .dish-tag.tag-terra { background: var(--terra); color: white; }
+    .dish-tag.tag-teal  { background: var(--teal);  color: white; }
+    .dish-body { padding: 20px 22px 22px; }
+    .dish-name { font-family: var(--font-head); font-size: 20px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+    .dish-desc { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; }
+    .dish-footer { display: flex; justify-content: space-between; align-items: center; }
+    .dish-price { font-family: var(--font-logo); font-size: 22px; color: var(--terra); }
+
+    /* ─── Gallery ─────────────────────────────────── */
+    .gallery { background: var(--dark); padding: 100px 0; position: relative; overflow: hidden; }
+    .gallery::before {
+      content: ''; position: absolute; top: -2px; left: 0; right: 0; height: 80px;
+      background: var(--cream-w); clip-path: ellipse(55% 100% at 50% 0%);
+    }
+    .gallery::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 80px;
+      background: var(--cream); clip-path: ellipse(55% 100% at 50% 100%);
+    }
+    .gallery-header { text-align: center; margin-bottom: 56px; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 280px 280px;
+      gap: 16px;
+    }
+    .g-cell { overflow: hidden; border-radius: 16px; position: relative; }
+    .g-cell img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease-out); }
+    .g-cell:hover img { transform: scale(1.07); }
+    .g-cell::after {
+      content: ''; position: absolute; inset: 0; border-radius: 16px;
+      background: linear-gradient(to top, rgba(28,10,4,.5) 0%, transparent 50%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .g-cell:hover::after { opacity: 1; }
+    .g1 { grid-column: span 5; }
+    .g2 { grid-column: span 4; }
+    .g3 { grid-column: span 3; }
+    .g4 { grid-column: span 4; }
+    .g5 { grid-column: span 5; }
+    .g6 { grid-column: span 3; }
+
+    /* ─── Ambiance quote ──────────────────────────── */
+    .quote-section {
+      background: var(--amber); padding: 80px 0; text-align: center; overflow: hidden; position: relative;
+    }
+    .quote-text {
+      font-family: var(--font-head); font-style: italic;
+      font-size: clamp(28px, 4.5vw, 54px); font-weight: 300;
+      color: var(--dark); line-height: 1.2; max-width: 900px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .quote-text strong { font-weight: 600; }
+    .quote-deco {
+      font-family: var(--font-logo); font-size: 200px; color: rgba(28,10,4,.07);
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      pointer-events: none; user-select: none; white-space: nowrap;
+    }
+    .quote-attr {
+      font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--terra); margin-top: 28px;
+    }
+
+    /* ─── Reservation ─────────────────────────────── */
+    .resa { background: var(--cream); }
+    .resa-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 80px; align-items: start; }
+    .resa-info { padding-top: 8px; }
+    .resa-card-img {
+      width: 100%; height: 260px; object-fit: cover;
+      border-radius: 20px; margin-bottom: 36px;
+      box-shadow: 0 16px 48px rgba(28,10,4,.15);
+    }
+    .info-row {
+      display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px;
+    }
+    .info-icon {
+      width: 46px; height: 46px; flex-shrink: 0; border-radius: 12px;
+      background: var(--amber-pale); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .info-icon svg { color: var(--terra); }
+    .info-title { font-weight: 600; font-size: 15px; margin-bottom: 2px; color: var(--dark); }
+    .info-desc  { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    .resa-form {
+      background: white; border: 1px solid var(--border);
+      border-radius: 24px; padding: 44px;
+      box-shadow: 0 12px 48px rgba(28,10,4,.08);
+    }
+    .form-title { font-family: var(--font-head); font-size: 26px; font-weight: 600; color: var(--dark); margin-bottom: 30px; }
+    .form-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .fg { margin-bottom: 18px; }
+    .fg label  { display: block; font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 7px; letter-spacing: .02em; }
+    .fg .req   { color: var(--terra); margin-left: 2px; }
+    .fg input, .fg select, .fg textarea {
+      width: 100%; font-family: var(--font-body); font-size: 15px; color: var(--dark);
+      background: var(--cream); border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 12px 16px; min-height: 48px; appearance: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus {
+      outline: none; border-color: var(--amber); box-shadow: 0 0 0 3px rgba(232,180,0,.18);
+    }
+    .fg input.err { border-color: var(--terra); }
+    .fg .errmsg  { display: none; font-size: 12px; color: var(--terra); margin-top: 5px; }
+    .fg input.err ~ .errmsg { display: block; }
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: ''; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      border: 5px solid transparent; border-top: 6px solid var(--muted); pointer-events: none;
+    }
+    .fg textarea { resize: vertical; min-height: 88px; }
+    .btn-submit {
+      width: 100%; background: var(--terra); color: white;
+      font-size: 16px; font-weight: 600; padding: 18px;
+      border: none; border-radius: 99px; margin-top: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background .22s, transform .22s var(--ease-spring), box-shadow .22s;
+      box-shadow: 0 6px 20px rgba(200,75,30,.3);
+    }
+    .btn-submit:hover {
+      background: var(--terra-l); transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(200,75,30,.4);
+    }
+    .btn-submit svg { transition: transform .22s; }
+    .btn-submit:hover svg { transform: translateX(5px); }
+    .btn-submit:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 32px; right: 32px; z-index: 999;
+      background: var(--dark); color: white; padding: 16px 24px;
+      border-radius: 16px; font-size: 15px; font-weight: 500;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.28);
+      transform: translateY(120px); opacity: 0;
+      transition: transform .35s var(--ease-spring), opacity .35s;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ─── Footer ──────────────────────────────────── */
+    .footer { background: var(--dark); padding: 80px 0 36px; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 60px; }
+    .footer-logo-prima { font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--terra); margin-bottom: 4px; }
+    .footer-logo-boheme { font-family: var(--font-logo); font-size: 38px; color: var(--amber); line-height: 1; margin-bottom: 16px; }
+    .footer-tagline { font-family: var(--font-head); font-style: italic; font-size: 15px; color: rgba(255,255,255,.45); line-height: 1.7; }
+    .footer-social { display: flex; gap: 10px; margin-top: 24px; }
+    .footer-social a {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.65);
+      transition: background .22s, color .22s, transform .22s var(--ease-spring);
+    }
+    .footer-social a:hover { background: var(--amber); color: var(--dark); transform: translateY(-3px); }
+    .footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: white; margin-bottom: 18px; }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(255,255,255,.45); transition: color .2s, padding-left .2s; }
+    .footer-links a:hover { color: var(--amber-l); padding-left: 6px; }
+    .footer-contact-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+    .footer-contact-row svg { flex-shrink: 0; margin-top: 2px; color: var(--amber); }
+    .footer-contact-row p { font-size: 14px; color: rgba(255,255,255,.45); line-height: 1.65; }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 32px; border-top: 1px solid rgba(255,255,255,.08);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 12px; color: rgba(255,255,255,.3); }
+    .footer-bottom a { color: var(--amber); }
+
+    /* Uber Eats badge */
+    .uber-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 10px 16px; margin-top: 20px;
+      font-size: 13px; color: rgba(255,255,255,.6); font-weight: 500;
+    }
+    .uber-badge strong { color: white; }
+
+    /* ─── Responsive ──────────────────────────────── */
+    @media (max-width: 1024px) {
+      .esprit-grid, .resa-grid { grid-template-columns: 1fr; gap: 52px; }
+      .esprit-images { height: 420px; }
+      .menu-grid { grid-template-columns: repeat(2,1fr); }
+      .gallery-grid { grid-template-columns: repeat(6,1fr); grid-template-rows: 240px 240px; }
+      .g1,.g4 { grid-column: span 3; }
+      .g2,.g5 { grid-column: span 3; }
+      .g3,.g6 { grid-column: span 3; display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .band-dark-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav { padding: 0 20px; }
+      .nav-inner { height: 64px; }
+      .container { padding: 0 20px; }
+      .section { padding: 72px 0; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 200px); }
+      .g1,.g2,.g3,.g4,.g5,.g6 { grid-column: span 1; display: block; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .resa-form { padding: 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .band-dark-grid { grid-template-columns: repeat(2,1fr); }
+      .hero-title { font-size: clamp(42px,12vw,70px); }
+    }
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; }
+      .btn-amber, .btn-ghost { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════════ -->
+<nav class="nav" id="nav" role="navigation" aria-label="Navigation principale">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" aria-label="Prima Bohème — accueil">
+      <span class="nav-logo-prima">Prima</span>
+      <span class="nav-logo-boheme">bohème</span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a onclick="go('esprit')">L'Esprit</a></li>
+      <li><a onclick="go('carte')">La Carte</a></li>
+      <li><a onclick="go('galerie')">Galerie</a></li>
+      <li><a onclick="go('resa')" class="nav-btn">Réserver</a></li>
+    </ul>
+    <button class="hamburger" id="ham" aria-label="Ouvrir le menu" aria-expanded="false" onclick="openMob()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<nav class="mobile-nav" id="mob" aria-modal="true" role="dialog">
+  <button class="mobile-close" onclick="closeMob()" aria-label="Fermer">✕</button>
+  <a onclick="go('esprit');closeMob()">L'Esprit</a>
+  <a onclick="go('carte');closeMob()">La Carte</a>
+  <a onclick="go('galerie');closeMob()">Galerie</a>
+  <a onclick="go('resa');closeMob()" style="color:var(--amber)">Réserver</a>
+</nav>
+
+<main>
+
+<!-- ══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-parallax" id="heroBg" role="img" aria-label="Salle de Prima Bohème, ambiance chaleureuse et bohème"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
+
+  <!-- Rotating deco ring -->
+  <svg class="hero-ring" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+    <circle cx="60" cy="60" r="54" stroke="rgba(232,180,0,.3)" stroke-width="1" stroke-dasharray="6 6"/>
+    <text font-family="DM Sans, sans-serif" font-size="10" font-weight="600" fill="rgba(232,180,0,.7)" letter-spacing="4">
+      <textPath href="#ring-path">PIZZA • PASTA • COCKTAILS • TERRASSE •&nbsp;</textPath>
+    </text>
+    <path id="ring-path" d="M60,6 a54,54 0 1,1 -.001,0" fill="none"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="hero-dot"></span>
+      Pizzeria · L'Union · Toulouse
+    </div>
+    <h1 class="hero-title" id="hero-title">
+      Prima<br><span>bohème</span>
+    </h1>
+    <p class="hero-sub">Vivons ensemble un instant d'évasion</p>
+    <div class="hero-actions">
+      <button class="btn-amber" onclick="go('resa')" aria-label="Réserver une table">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Réserver une table
+      </button>
+      <button class="btn-ghost" onclick="go('carte')" aria-label="Voir la carte">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Voir la carte
+      </button>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <span>Découvrir</span>
+    <div class="scroll-line"></div>
+  </div>
+
+  <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#FFFAEF"/>
+  </svg>
+</section>
+
+<!-- ══ MARQUEE ════════════════════════════════════════════════ -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item">Pizza Napolitaine</div>
+    <div class="marquee-item">Pasta Fraîche</div>
+    <div class="marquee-item">Antipasti</div>
+    <div class="marquee-item">Cocktails</div>
+    <div class="marquee-item">Terrasse au Bord du Lac</div>
+    <div class="marquee-item">Pétanque</div>
+    <div class="marquee-item">Gelato Artisanal</div>
+    <div class="marquee-item">Cave à Vins</div>
+    <!-- duplicate for seamless loop -->
+    <div class="marquee-item">Pizza Napolitaine</div>
+    <div class="marquee-item">Pasta Fraîche</div>
+    <div class="marquee-item">Antipasti</div>
+    <div class="marquee-item">Cocktails</div>
+    <div class="marquee-item">Terrasse au Bord du Lac</div>
+    <div class="marquee-item">Pétanque</div>
+    <div class="marquee-item">Gelato Artisanal</div>
+    <div class="marquee-item">Cave à Vins</div>
+  </div>
+</div>
+
+<!-- ══ L'ESPRIT ═══════════════════════════════════════════════ -->
+<section class="esprit section" id="esprit" aria-labelledby="esprit-title">
+  <div class="esprit-bg-blob" aria-hidden="true"></div>
+  <div class="container">
+    <div class="esprit-grid">
+
+      <div class="esprit-images reveal-left" aria-hidden="true">
+        <img class="esprit-img-main"
+          src="https://boheme.primafamily.fr/assets/img/descGallery_2.webp"
+          alt="Table de Prima Bohème avec pizzas, antipasti et cocktails"
+          width="680" height="460" loading="lazy"/>
+        <img class="esprit-img-accent"
+          src="https://boheme.primafamily.fr/assets/img/gallery_3.webp"
+          alt="Vue aérienne de la terrasse de Prima Bohème"
+          width="420" height="308" loading="lazy"/>
+        <div class="esprit-badge" aria-hidden="true">
+          <span>Ouvert</span>
+          <span>7j/7</span>
+          <small>midi & soir</small>
+        </div>
+      </div>
+
+      <div class="reveal-right delay-2">
+        <p class="label">L'Esprit Bohème</p>
+        <h2 class="h2" id="esprit-title">Un lieu de vie<br><em style="font-family:var(--font-head);font-style:italic;">hors du commun</em></h2>
+        <p class="italic-sub">Pizzeria, bar, terrasse — au bord du lac à L'Union</p>
+
+        <p style="color:var(--muted);margin-top:24px;line-height:1.85;font-size:15px;">
+          Prima Bohème, c'est bien plus qu'un restaurant. C'est un espace de liberté pensé pour vous faire vivre un vrai moment d'évasion. Des pizzas napolitaines cuites au feu de bois, une cave à vins soigneusement sélectionnée, des cocktails colorés, une terrasse ensoleillée au bord du lac...
+        </p>
+        <p style="color:var(--muted);margin-top:14px;line-height:1.85;font-size:15px;">
+          Réservez votre soirée, venez avec vos proches — il y a même un terrain de pétanque et un espace pour les enfants. Ici, le temps s'arrête.
+        </p>
+
+        <div class="esprit-pills reveal delay-3">
+          <span class="pill"><span class="pill-dot" style="background:var(--terra)"></span>Pizza napolitaine</span>
+          <span class="pill"><span class="pill-dot" style="background:var(--amber)"></span>Terrasse lac</span>
+          <span class="pill"><span class="pill-dot" style="background:var(--teal)"></span>Pétanque</span>
+          <span class="pill"><span class="pill-dot" style="background:var(--blue)"></span>Bar & cocktails</span>
+          <span class="pill"><span class="pill-dot" style="background:var(--terra)"></span>Espace enfants</span>
+          <span class="pill"><span class="pill-dot" style="background:var(--amber)"></span>Gelato maison</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS BAND ═════════════════════════════════════════════ -->
+<div class="band-dark" aria-label="Chiffres clés">
+  <div class="container">
+    <div class="band-dark-grid">
+      <div class="band-stat reveal delay-1">
+        <div class="band-stat-num">200+</div>
+        <div class="band-stat-label">Références de vins</div>
+      </div>
+      <div class="band-stat reveal delay-2">
+        <div class="band-stat-num">4.5★</div>
+        <div class="band-stat-label">Note Google</div>
+      </div>
+      <div class="band-stat reveal delay-3">
+        <div class="band-stat-num">120</div>
+        <div class="band-stat-label">Couverts en terrasse</div>
+      </div>
+      <div class="band-stat reveal delay-4">
+        <div class="band-stat-num">100%</div>
+        <div class="band-stat-label">Fait avec passion</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LA CARTE ═══════════════════════════════════════════════ -->
+<section class="carte section" id="carte" aria-labelledby="carte-title">
+  <div class="container">
+    <div class="carte-header reveal">
+      <p class="label">La Carte</p>
+      <h2 class="h2" id="carte-title">Nos Spécialités</h2>
+      <p class="italic-sub">Produits frais, cuisson au feu de bois, saveurs d'Italie</p>
+    </div>
+
+    <div class="carte-tabs reveal delay-2" role="tablist" aria-label="Catégories du menu">
+      <button class="tab-btn active" onclick="switchTab('pizzas',this)" role="tab" aria-selected="true" aria-controls="t-pizzas" id="btn-pizzas">🍕 Pizzas</button>
+      <button class="tab-btn" onclick="switchTab('antipasti',this)" role="tab" aria-selected="false" aria-controls="t-antipasti" id="btn-antipasti">Antipasti</button>
+      <button class="tab-btn" onclick="switchTab('pasta',this)" role="tab" aria-selected="false" aria-controls="t-pasta" id="btn-pasta">Pasta</button>
+      <button class="tab-btn" onclick="switchTab('dolci',this)" role="tab" aria-selected="false" aria-controls="t-dolci" id="btn-dolci">Dolci & Boissons</button>
+    </div>
+
+    <div class="menu-grid">
+
+      <!-- PIZZAS -->
+      <div class="menu-panel active" id="t-pizzas" role="tabpanel" aria-labelledby="btn-pizzas">
+        <article class="dish reveal delay-1">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_1.webp"
+              alt="Pizza napolitaine avec tomates, ricotta et roquette" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag">Signature</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">La Bohème</h3>
+            <p class="dish-desc">Tomates cerises, ricotta fraîche, roquette, jambon de Parme, pignons de pin. Notre pizza emblématique.</p>
+            <div class="dish-footer">
+              <span class="dish-price">16 €</span>
+              <span style="font-size:12px;color:var(--muted);">Feu de bois</span>
+            </div>
+          </div>
+        </article>
+        <article class="dish reveal delay-2">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_3.webp"
+              alt="Pizza végétarienne avec légumes grillés et feta" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag tag-teal">Végé</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">La Méditerranée</h3>
+            <p class="dish-desc">Tomates confites, feta, aubergines grillées, basilic frais, câpres et olives. Un voyage en bord de mer.</p>
+            <div class="dish-footer">
+              <span class="dish-price">15 €</span>
+              <span style="font-size:12px;color:var(--muted);">Sans viande</span>
+            </div>
+          </div>
+        </article>
+        <article class="dish reveal delay-3">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_2.webp"
+              alt="Assortiment de plats Prima Bohème" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag tag-terra">Bestseller</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">La Carnivora</h3>
+            <p class="dish-desc">Chorizo, coppa, poivrons rôtis, mozzarella di buffala, origan. Pour les amateurs de caractère.</p>
+            <div class="dish-footer">
+              <span class="dish-price">17 €</span>
+              <span style="font-size:12px;color:var(--muted);">Très apprécié</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- ANTIPASTI -->
+      <div class="menu-panel" id="t-antipasti" role="tabpanel" aria-labelledby="btn-antipasti">
+        <article class="dish reveal delay-1">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_2.webp"
+              alt="Planche de charcuterie italienne Prima Bohème" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag">Partage</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Planche Prima</h3>
+            <p class="dish-desc">Jambon de Parme, coppa, bresaola, burrata, bruschetta tomates et focaccia maison.</p>
+            <div class="dish-footer">
+              <span class="dish-price">19 €</span>
+              <span style="font-size:12px;color:var(--muted);">Pour 2</span>
+            </div>
+          </div>
+        </article>
+        <article class="dish reveal delay-2">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_3.webp"
+              alt="Arancini au fromage et sauce tomate" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag tag-amber" style="background:var(--amber);color:var(--dark);">Maison</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Arancini Maison</h3>
+            <p class="dish-desc">Boulettes de riz siciliennes croustillantes, farcies à la mozzarella fondue. Sauce tomate maison.</p>
+            <div class="dish-footer">
+              <span class="dish-price">11 €</span>
+              <span style="font-size:12px;color:var(--muted);">6 pièces</span>
+            </div>
+          </div>
+        </article>
+        <article class="dish reveal delay-3">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_1.webp"
+              alt="Salade fraîche avec grenade et fromage" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag tag-teal">Fraîcheur</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Salade Bohème</h3>
+            <p class="dish-desc">Jeunes pousses, grenade, feta émietté, noix, figues fraîches, vinaigrette au miel et balsamique.</p>
+            <div class="dish-footer">
+              <span class="dish-price">13 €</span>
+              <span style="font-size:12px;color:var(--muted);">Végétarien</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- PASTA -->
+      <div class="menu-panel" id="t-pasta" role="tabpanel" aria-labelledby="btn-pasta">
+        <article class="dish reveal delay-1">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_2.webp"
+              alt="Pâtes fraîches carbonara maison" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag">Fait maison</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Spaghetti Carbonara</h3>
+            <p class="dish-desc">Pâtes fraîches maison, guanciale, pecorino romano affiné, jaune d'œuf, poivre noir de Sarawak.</p>
+            <div class="dish-footer">
+              <span class="dish-price">18 €</span>
+            </div>
+          </div>
+        </article>
+        <article class="dish reveal delay-2">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_3.webp"
+              alt="Linguine aux fruits de mer" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag tag-terra">Chef</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Linguine Frutti di Mare</h3>
+            <p class="dish-desc">Palourdes, crevettes, moules, tomates cerises, ail, citron de Sicile et persil plat.</p>
+            <div class="dish-footer">
+              <span class="dish-price">22 €</span>
+            </div>
+          </div>
+        </article>
+        <article class="dish reveal delay-3">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_1.webp"
+              alt="Risotto aux champignons et truffe" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag tag-teal">Végé</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Risotto Porcini & Truffe</h3>
+            <p class="dish-desc">Riz Carnaroli, cèpes sauvages, beurre de truffe noire, parmigiano reggiano 24 mois.</p>
+            <div class="dish-footer">
+              <span class="dish-price">24 €</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- DOLCI -->
+      <div class="menu-panel" id="t-dolci" role="tabpanel" aria-labelledby="btn-dolci">
+        <article class="dish reveal delay-1">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/gallery_2.webp"
+              alt="Cocktail Prima Bohème dans un verre bohème gravé" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag">Bar signature</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Cocktail Prima</h3>
+            <p class="dish-desc">Notre cocktail maison : Aperol, prosecco, citron vert, basilic frais, sirop de grenade. Servi dans notre verre gravé.</p>
+            <div class="dish-footer">
+              <span class="dish-price">11 €</span>
+            </div>
+          </div>
+        </article>
+        <article class="dish reveal delay-2">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_1.webp"
+              alt="Gelato artisanal aux saveurs italiennes" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag tag-amber" style="background:var(--amber);color:var(--dark);">Artisanal</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Gelato del Giorno</h3>
+            <p class="dish-desc">Glace artisanale aux saveurs du jour : pistache de Bronte, stracciatella, citron de Sicile, fraises des bois.</p>
+            <div class="dish-footer">
+              <span class="dish-price">6 €</span>
+              <span style="font-size:12px;color:var(--muted);">2 boules</span>
+            </div>
+          </div>
+        </article>
+        <article class="dish reveal delay-3">
+          <div class="dish-img">
+            <img src="https://boheme.primafamily.fr/assets/img/descGallery_3.webp"
+              alt="Tiramisù à la Prima Bohème" loading="lazy" width="600" height="220"/>
+            <span class="dish-tag tag-terra">Classico</span>
+          </div>
+          <div class="dish-body">
+            <h3 class="dish-name">Tiramisù Bohème</h3>
+            <p class="dish-desc">Recette maison : mascarpone fouetté, biscuits imbibés espresso, cacao pur, amandes effilées torréfiées.</p>
+            <div class="dish-footer">
+              <span class="dish-price">8 €</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+    </div><!-- /menu-grid -->
+
+    <div class="reveal" style="text-align:center;margin-top:48px;">
+      <a href="https://boheme.primafamily.fr/PDFCard_6.pdf" target="_blank" rel="noopener"
+        style="display:inline-flex;align-items:center;gap:10px;background:var(--dark);color:white;padding:16px 32px;border-radius:99px;font-weight:600;font-size:15px;transition:background .22s,transform .22s;"
+        onmouseover="this.style.background='var(--dark-mid)';this.style.transform='translateY(-3px)'"
+        onmouseout="this.style.background='var(--dark)';this.style.transform='translateY(0)'">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Télécharger la carte complète (PDF)
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ QUOTE ══════════════════════════════════════════════════ -->
+<div class="quote-section">
+  <div class="quote-deco" aria-hidden="true">bohème</div>
+  <div class="container">
+    <p class="quote-text reveal">
+      <strong>"</strong>Un endroit où l'on vient pour dîner
+      et où l'on reste <strong>pour vivre.</strong><strong>"</strong>
+    </p>
+    <p class="quote-attr reveal delay-2">— L'esprit Prima Bohème</p>
+  </div>
+</div>
+
+<!-- ══ GALERIE ════════════════════════════════════════════════ -->
+<section class="gallery" id="galerie" aria-labelledby="galerie-title">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="gallery-header reveal">
+      <p class="label label-amber">Notre Univers</p>
+      <h2 class="h2 h2-white" id="galerie-title">La Galerie</h2>
+      <p style="font-family:var(--font-head);font-style:italic;font-size:18px;color:rgba(255,255,255,.45);margin-top:10px;">Chaque image raconte une histoire</p>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="g-cell g1">
+        <img src="https://boheme.primafamily.fr/assets/img/home.webp"
+          alt="Salle intérieure de Prima Bohème avec lampes en rotin et bar coloré" loading="lazy" width="800" height="280"/>
+      </div>
+      <div class="g-cell g2">
+        <img src="https://boheme.primafamily.fr/assets/img/descGallery_2.webp"
+          alt="Table garnie de pizzas, antipasti et vin" loading="lazy" width="600" height="280"/>
+      </div>
+      <div class="g-cell g3">
+        <img src="https://boheme.primafamily.fr/assets/img/gallery_1.webp"
+          alt="Coussin décoratif bohème artistique avec motifs abstraits" loading="lazy" width="400" height="280"/>
+      </div>
+      <div class="g-cell g4">
+        <img src="https://boheme.primafamily.fr/assets/img/descGallery_3.webp"
+          alt="Pizza napolitaine avec fromage et légumes" loading="lazy" width="600" height="280"/>
+      </div>
+      <div class="g-cell g5">
+        <img src="https://boheme.primafamily.fr/assets/img/gallery_3.webp"
+          alt="Vue aérienne de la terrasse Prima Bohème en bord de lac" loading="lazy" width="800" height="280"/>
+      </div>
+      <div class="g-cell g6">
+        <img src="https://boheme.primafamily.fr/assets/img/gallery_2.webp"
+          alt="Verre de cocktail avec le logo Prima Bohème gravé" loading="lazy" width="400" height="280"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RÉSERVATION ════════════════════════════════════════════ -->
+<section class="resa section" id="resa" aria-labelledby="resa-title">
+  <div class="container">
+    <div class="resa-grid">
+
+      <div class="resa-info reveal-left">
+        <img class="resa-card-img"
+          src="https://boheme.primafamily.fr/assets/img/footer.webp"
+          alt="Carte et support stylo Prima Bohème en couleur orange" loading="lazy" width="600" height="260"/>
+        <p class="label">Nous trouver</p>
+        <h2 class="h2" id="resa-title">Réservez<br><em style="font-family:var(--font-head);font-style:italic;">Votre Table</em></h2>
+        <p class="italic-sub" style="margin-bottom:36px;">Une soirée qui ressemble à nulle autre</p>
+
+        <div class="info-row">
+          <div class="info-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="info-title">Adresse</div>
+            <div class="info-desc">18 Rue d'Ariane, 31240 L'Union<br>À deux pas de Toulouse</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div>
+            <div class="info-title">Horaires</div>
+            <div class="info-desc">
+              Lun–Mer : 12h–14h15 &amp; 19h–22h<br>
+              Jeu–Ven : 12h–14h15 &amp; 19h–22h30<br>
+              Sam : 12h–15h &amp; 19h–22h30<br>
+              Dim : 12h–15h &amp; 19h–22h
+            </div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div>
+            <div class="info-title">Téléphone</div>
+            <div class="info-desc">
+              Restaurant : <a href="tel:0534664126" style="color:var(--terra);font-weight:600;">05 34 66 41 26</a><br>
+              À emporter : <a href="tel:0671882455" style="color:var(--terra);font-weight:600;">06 71 88 24 55</a>
+            </div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div class="info-title">Groupes (14+ personnes)</div>
+            <div class="info-desc"><a href="mailto:directionboheme@primafamily.fr" style="color:var(--terra);">directionboheme@primafamily.fr</a></div>
+          </div>
+        </div>
+
+        <div class="uber-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10H3M16 6l5 4-5 4"/></svg>
+          Commandez en livraison sur <strong>Uber Eats</strong>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="reveal-right delay-2">
+        <div class="resa-form">
+          <h3 class="form-title">Réserver une table</h3>
+          <form id="resaForm" novalidate>
+            <div class="form-row">
+              <div class="fg">
+                <label for="fn">Prénom <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="fn" placeholder="Sophie" autocomplete="given-name" required aria-required="true"/>
+                <span class="errmsg" role="alert">Champ requis.</span>
+              </div>
+              <div class="fg">
+                <label for="ln">Nom <span class="req" aria-hidden="true">*</span></label>
+                <input type="text" id="ln" placeholder="Dupont" autocomplete="family-name" required aria-required="true"/>
+                <span class="errmsg" role="alert">Champ requis.</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="fg">
+                <label for="em">Email <span class="req" aria-hidden="true">*</span></label>
+                <input type="email" id="em" placeholder="sophie@email.com" autocomplete="email" required aria-required="true"/>
+                <span class="errmsg" role="alert">Email invalide.</span>
+              </div>
+              <div class="fg">
+                <label for="tel">Téléphone</label>
+                <input type="tel" id="tel" placeholder="06 XX XX XX XX" autocomplete="tel"/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="fg">
+                <label for="dt">Date <span class="req" aria-hidden="true">*</span></label>
+                <input type="date" id="dt" required aria-required="true"/>
+                <span class="errmsg" role="alert">Date requise.</span>
+              </div>
+              <div class="fg">
+                <label for="hr">Heure <span class="req" aria-hidden="true">*</span></label>
+                <div class="select-wrap">
+                  <select id="hr" required aria-required="true">
+                    <option value="" disabled selected>Choisir…</option>
+                    <optgroup label="Déjeuner">
+                      <option>12h00</option><option>12h30</option>
+                      <option>13h00</option><option>13h30</option><option>14h00</option>
+                    </optgroup>
+                    <optgroup label="Dîner">
+                      <option>19h00</option><option>19h30</option><option>20h00</option>
+                      <option>20h30</option><option>21h00</option><option>21h30</option>
+                    </optgroup>
+                  </select>
+                  <span class="errmsg" role="alert">Heure requise.</span>
+                </div>
+              </div>
+            </div>
+            <div class="fg">
+              <label for="gs">Couverts <span class="req" aria-hidden="true">*</span></label>
+              <div class="select-wrap">
+                <select id="gs" required aria-required="true">
+                  <option value="" disabled selected>Nombre de personnes…</option>
+                  <option>1 personne</option><option>2 personnes</option>
+                  <option>3 personnes</option><option>4 personnes</option>
+                  <option>5 personnes</option><option>6 personnes</option>
+                  <option>7 à 10 personnes</option>
+                  <option>Groupe 14+ (contacter par email)</option>
+                </select>
+                <span class="errmsg" role="alert">Requis.</span>
+              </div>
+            </div>
+            <div class="fg">
+              <label for="occ">Occasion</label>
+              <div class="select-wrap">
+                <select id="occ">
+                  <option value="">Aucune en particulier</option>
+                  <option>Anniversaire</option><option>Romantique</option>
+                  <option>Repas d'affaires</option><option>Célébration</option>
+                </select>
+              </div>
+            </div>
+            <div class="fg">
+              <label for="msg">Message / Allergies</label>
+              <textarea id="msg" placeholder="Allergies, demandes particulières, chaise haute enfant…"></textarea>
+            </div>
+            <button type="submit" class="btn-submit" aria-label="Envoyer la réservation">
+              Confirmer la réservation
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<footer class="footer" aria-label="Pied de page">
+  <div class="container">
+    <div class="footer-grid">
+
+      <div>
+        <div class="footer-logo-prima">Prima</div>
+        <div class="footer-logo-boheme">bohème</div>
+        <p class="footer-tagline">Vivons ensemble un instant d'évasion. Pizzeria, bar & terrasse au bord du lac à L'Union, Toulouse.</p>
+        <div class="footer-social" aria-label="Réseaux sociaux">
+          <a href="https://www.instagram.com/primaboheme" target="_blank" rel="noopener" aria-label="Instagram Prima Bohème">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=100094711826860" target="_blank" rel="noopener" aria-label="Facebook Prima Bohème">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@prima.family" target="_blank" rel="noopener" aria-label="TikTok Prima Family">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="footer-col-title">Navigation</h3>
+        <ul class="footer-links" role="list">
+          <li><a onclick="go('esprit')">L'Esprit</a></li>
+          <li><a onclick="go('carte')">La Carte</a></li>
+          <li><a onclick="go('galerie')">Galerie</a></li>
+          <li><a onclick="go('resa')">Réservation</a></li>
+          <li><a href="https://boheme.primafamily.fr/PDFCard_6.pdf" target="_blank">Menu PDF</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="footer-col-title">Services</h3>
+        <ul class="footer-links" role="list">
+          <li><a>Pizza sur place</a></li>
+          <li><a>À emporter</a></li>
+          <li><a>Livraison Uber Eats</a></li>
+          <li><a>Événements privés</a></li>
+          <li><a>Séminaires groupes</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="footer-col-title">Contact</h3>
+        <div class="footer-contact-row">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <p>18 Rue d'Ariane<br>31240 L'Union, Toulouse</p>
+        </div>
+        <div class="footer-contact-row">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <p><a href="tel:0534664126" style="color:var(--amber);">05 34 66 41 26</a></p>
+        </div>
+        <div class="footer-contact-row">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <p><a href="mailto:directionboheme@primafamily.fr" style="color:var(--amber);">directionboheme@...</a></p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2024 Prima Bohème — <a href="https://primafamily.fr" target="_blank">Prima Family</a></p>
+      <p>Créé avec passion · <a href="#">Mentions légales</a> · <a href="#">Confidentialité</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+  Réservation envoyée — à très vite chez Prima Bohème !
+</div>
+
+<script>
+  /* ── Nav scroll ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('solid', scrollY > 60), {passive:true});
+
+  /* ── Hero parallax ── */
+  const heroBg = document.getElementById('heroBg');
+  window.addEventListener('scroll', () => {
+    heroBg.style.transform = `translateY(${scrollY * 0.35}px)`;
+  }, {passive:true});
+
+  /* ── Mobile nav ── */
+  const mob = document.getElementById('mob');
+  const ham = document.getElementById('ham');
+  function openMob()  { mob.classList.add('open');    ham.setAttribute('aria-expanded','true');  document.body.style.overflow='hidden'; }
+  function closeMob() { mob.classList.remove('open'); ham.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeMob(); });
+
+  /* ── Smooth scroll ── */
+  function go(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+  /* ── Menu tabs ── */
+  function switchTab(name, btn) {
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    document.getElementById('t-'+name)?.classList.add('active');
+    btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+    // re-trigger reveals inside newly shown panel
+    document.querySelectorAll('#t-'+name+' .reveal').forEach(el => {
+      el.classList.remove('vis');
+      setTimeout(() => el.classList.add('vis'), 60);
+    });
+  }
+
+  /* ── Date min ── */
+  document.getElementById('dt').min = new Date().toISOString().split('T')[0];
+
+  /* ── Form ── */
+  document.getElementById('resaForm').addEventListener('submit', function(e) {
+    e.preventDefault(); let ok = true;
+    const checks = [
+      {id:'fn', test: v => v.trim().length >= 2},
+      {id:'ln', test: v => v.trim().length >= 2},
+      {id:'em', test: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
+      {id:'dt', test: v => v !== ''},
+      {id:'hr', test: v => v !== ''},
+      {id:'gs', test: v => v !== ''},
+    ];
+    checks.forEach(({id, test}) => {
+      const el = document.getElementById(id);
+      const pass = test(el.value);
+      el.classList.toggle('err', !pass);
+      if (!pass) { ok = false; el.setAttribute('aria-invalid','true'); }
+      else el.removeAttribute('aria-invalid');
+    });
+    if (!ok) { document.querySelector('.err')?.focus(); return; }
+    const btn = this.querySelector('.btn-submit');
+    btn.textContent = 'Envoi en cours…'; btn.disabled = true;
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = 'Confirmer la réservation <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+      this.reset();
+      const t = document.getElementById('toast');
+      t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 5000);
+    }, 1200);
+  });
+
+  /* ── Scroll reveals (IntersectionObserver) ── */
+  const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if (!reduced) {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+    }, {threshold: 0.1, rootMargin: '0px 0px -32px 0px'});
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => obs.observe(el));
+  } else {
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => el.classList.add('vis'));
+  }
+
+  /* ── Clear field errors on blur ── */
+  document.querySelectorAll('#resaForm input, #resaForm select').forEach(el => {
+    el.addEventListener('blur', () => { if(el.value.trim()) { el.classList.remove('err'); el.removeAttribute('aria-invalid'); } });
+  });
+</script>
+</body>
+</html>
