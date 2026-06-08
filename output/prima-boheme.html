@@ -547,7 +547,8 @@
     }
     .fg input.err { border-color: var(--terra); }
     .fg .errmsg  { display: none; font-size: 12px; color: var(--terra); margin-top: 5px; }
-    .fg input.err ~ .errmsg { display: block; }
+    .fg input.err ~ .errmsg,
+    .fg .select-wrap select.err ~ .errmsg { display: block; }
     .select-wrap { position: relative; }
     .select-wrap::after {
       content: ''; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
