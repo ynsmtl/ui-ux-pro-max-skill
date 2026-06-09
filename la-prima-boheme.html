@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="La Prima Bohème — Restaurant italien au cœur de Toulouse. Pizzas napolitaines, pâtes fraîches maison et une ambiance bohème unique." />
+  <title>La Prima Bohème — Restaurant Italien · Toulouse</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='none' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM
+       ============================================================ */
+    :root {
+      --background: 0 0% 0%;
+      --foreground: 0 0% 100%;
+      --card: 0 0% 5%;
+      --card-foreground: 0 0% 100%;
+      --primary: 0 0% 100%;
+      --primary-foreground: 0 0% 0%;
+      --secondary: 0 0% 12%;
+      --secondary-foreground: 0 0% 85%;
+      --muted: 0 0% 15%;
+      --muted-foreground: 0 0% 65%;
+      --accent: 170 15% 45%;
+      --accent-foreground: 0 0% 100%;
+      --border: 0 0% 20%;
+      --input: 0 0% 18%;
+      --ring: 0 0% 40%;
+      --hero-subtitle: 210 17% 95%;
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    ::selection { background: #fff; color: #000; }
+
+    /* ============================================================
+       LIQUID GLASS
+       ============================================================ */
+    .liquid-glass {
+      background: rgba(255,255,255,0.01);
+      background-blend-mode: luminosity;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg,
+        rgba(255,255,255,.45) 0%, rgba(255,255,255,.15) 20%,
+        rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+        rgba(255,255,255,.15) 80%, rgba(255,255,255,.45) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       TYPOGRAPHY HELPERS
+       ============================================================ */
+    .serif {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* ============================================================
+       FADE-UP ANIMATION (replaces Framer Motion fadeUp)
+       ============================================================ */
+    .fu {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease-out, transform .6s ease-out;
+    }
+    .fu.in { opacity: 1; transform: translateY(0); }
+    .fu[data-d="1"] { transition-delay: .1s; }
+    .fu[data-d="2"] { transition-delay: .2s; }
+    .fu[data-d="3"] { transition-delay: .3s; }
+    .fu[data-d="4"] { transition-delay: .4s; }
+
+    /* ============================================================
+       NAVBAR
+       ============================================================ */
+    #nav {
+      position: fixed; inset-x: 0; top: 0; z-index: 50;
+      padding: 1rem 2rem;
+      animation: navIn .6s ease-out both;
+    }
+    @media (min-width:768px) { #nav { padding: 1rem 7rem; } }
+
+    @keyframes navIn {
+      from { opacity:0; transform:translateY(-16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .nav-row {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 1.5rem;
+    }
+
+    /* Brand */
+    .brand {
+      display: flex; align-items: center; gap: .65rem;
+      text-decoration: none; color: inherit; flex-shrink: 0;
+    }
+    .cm { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+    .cm-o { width:1.75rem; height:1.75rem; border-radius:50%; border:2px solid rgba(255,255,255,.6); display:block; }
+    .cm-i { position:absolute; width:.75rem; height:.75rem; border-radius:50%; border:1px solid rgba(255,255,255,.6); }
+    .brand-name { font-size:1.125rem; font-weight:700; letter-spacing:-.02em; white-space:nowrap; }
+
+    /* Nav links */
+    .nav-links { display:none; align-items:center; gap:.5rem; list-style:none; }
+    @media (min-width:1024px) { .nav-links { display:flex; } }
+    .nav-links li { display:flex; align-items:center; gap:.5rem; }
+    .nav-sep { color:rgba(255,255,255,.2); font-size:.625rem; }
+    .nav-links a {
+      font-size:.875rem; color:hsl(var(--muted-foreground));
+      text-decoration:none; transition:color .2s;
+    }
+    .nav-links a:hover { color:#fff; }
+
+    /* Social buttons */
+    .nav-socials { display:flex; align-items:center; gap:.75rem; }
+    .soc-btn {
+      width:2.5rem; height:2.5rem; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      color:hsl(var(--muted-foreground)); text-decoration:none;
+      transition:color .2s;
+    }
+    .soc-btn:hover { color:#fff; }
+    .soc-btn svg {
+      width:1.125rem; height:1.125rem;
+      fill:none; stroke:currentColor; stroke-width:2;
+      stroke-linecap:round; stroke-linejoin:round;
+    }
+
+    /* ============================================================
+       HERO
+       ============================================================ */
+    #hero {
+      position:relative; min-height:100vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      overflow:hidden; padding:0 1.5rem; text-align:center;
+    }
+    .hero-vid {
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; z-index:0;
+    }
+    /* Atmospheric fallback when no video */
+    .hero-atmo {
+      position:absolute; inset:0; z-index:0;
+      background:
+        radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255,255,255,.025) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(255,255,255,.012) 0%, transparent 60%),
+        #000;
+      animation: breathe 10s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%,100% { opacity:1; }
+      50%      { opacity:.75; }
+    }
+    .hero-fade {
+      position:absolute; inset-x:0; bottom:0; height:16rem;
+      background:linear-gradient(to top, #000, transparent);
+      z-index:1;
+    }
+    .hero-content {
+      position:relative; z-index:2;
+      display:flex; flex-direction:column; align-items:center;
+      padding-top:7rem;
+    }
+    @media (min-width:768px) { .hero-content { padding-top:8rem; } }
+
+    /* Avatar row */
+    .hero-avatars { display:flex; align-items:center; gap:.75rem; margin-bottom:2rem; }
+    .avatars-row { display:flex; }
+    .av {
+      width:2rem; height:2rem; border-radius:50%;
+      border:2px solid #000; margin-left:-.5rem;
+      overflow:hidden; flex-shrink:0;
+    }
+    .av:first-child { margin-left:0; }
+    .av svg { width:100%; height:100%; display:block; }
+    .avatars-label { font-size:.875rem; color:hsl(var(--muted-foreground)); }
+
+    /* Heading */
+    .hero-h1 {
+      font-size:clamp(2.75rem,7vw,5.5rem);
+      font-weight:500; letter-spacing:-.05em;
+      line-height:1.05; max-width:900px;
+      margin-bottom:1.5rem;
+    }
+    @media (min-width:1024px) { .hero-h1 { font-size:clamp(3rem,8vw,6.5rem); } }
+
+    .hero-sub {
+      font-size:1.125rem; color:hsl(var(--hero-subtitle));
+      max-width:42rem; margin-bottom:2.5rem; line-height:1.65;
+    }
+
+    /* Form pill */
+    .hero-form {
+      display:flex; align-items:center; gap:.5rem;
+      width:100%; max-width:32rem;
+      border-radius:9999px; padding:.5rem;
+    }
+    .hero-input {
+      flex:1; height:2.75rem; background:transparent;
+      border:none; outline:none; padding:0 1.25rem;
+      font-size:1rem; color:#fff; font-family:inherit;
+    }
+    .hero-input::placeholder { color:hsl(var(--muted-foreground)); }
+    .btn-pill {
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:.75rem 2rem; background:#fff; color:#000;
+      border-radius:9999px; font-size:.875rem; font-weight:600;
+      font-family:inherit; cursor:pointer; white-space:nowrap;
+      border:none; transition:transform .2s;
+    }
+    .btn-pill:hover  { transform:scale(1.03); }
+    .btn-pill:active { transform:scale(.98); }
+
+    /* ============================================================
+       SECTION: LA RESTAURATION A CHANGÉ
+       ============================================================ */
+    #evolved {
+      padding: clamp(13rem,16vw,16rem) 1.5rem clamp(1.5rem,2.25vw,2.25rem);
+    }
+    .evolved-inner { max-width:80rem; margin:0 auto; text-align:center; }
+
+    .s-h2 {
+      font-size:clamp(2.5rem,7vw,5rem);
+      font-weight:500; letter-spacing:-.05em;
+      line-height:1.05; margin-bottom:1.5rem;
+    }
+    @media (min-width:1024px) { .s-h2 { font-size:clamp(3rem,8vw,6rem); } }
+
+    .s-sub {
+      font-size:1.125rem; color:hsl(var(--muted-foreground));
+      max-width:42rem; margin:0 auto 6rem; line-height:1.6;
+    }
+
+    /* Pillar cards */
+    .pillars { display:grid; grid-template-columns:1fr; gap:3rem; margin-bottom:5rem; }
+    @media (min-width:768px) { .pillars { grid-template-columns:repeat(3,1fr); gap:2rem; } }
+
+    .pillar { display:flex; flex-direction:column; align-items:center; }
+
+    .p-icon {
+      width:12.5rem; height:12.5rem;
+      border-radius:2.7rem; background:#0c0c0c;
+      box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.14);
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 1.25rem;
+    }
+    .p-icon svg { width:4.5rem; height:4.5rem; }
+
+    .p-name { font-size:1rem; font-weight:600; margin-bottom:.5rem; }
+    .p-desc {
+      font-size:.875rem; color:hsl(var(--muted-foreground));
+      max-width:20rem; line-height:1.6;
+    }
+
+    .tagline { font-size:.875rem; color:hsl(var(--muted-foreground)); }
+
+    /* ============================================================
+       SECTION: NOTRE HISTOIRE (word reveal)
+       ============================================================ */
+    #histoire { padding-bottom:clamp(8rem,11vw,11rem); }
+    .histoire-inner {
+      max-width:80rem; margin:0 auto; padding:0 1.5rem;
+      display:flex; flex-direction:column; align-items:center;
+    }
+
+    /* Video / placeholder */
+    .hist-vid-wrap {
+      width:100%; max-width:50rem;
+      aspect-ratio:1/1; border-radius:1.5rem; overflow:hidden;
+      margin-bottom:4rem; background:#080808;
+      display:flex; align-items:center; justify-content:center;
+      position:relative;
+    }
+    @media (min-width:768px) { .hist-vid-wrap { margin-bottom:6rem; } }
+    .hist-vid { width:100%; height:100%; object-fit:cover; display:block; }
+    .hist-vid-label {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-family:'Instrument Serif',serif; font-style:italic;
+      font-size:clamp(2rem,6vw,4rem); color:rgba(255,255,255,.05);
+      pointer-events:none;
+    }
+
+    /* Word reveal text */
+    .wr-wrap { max-width:56rem; text-align:center; }
+    .wr-p1 {
+      font-size:clamp(1.25rem,2.5vw,2.5rem);
+      font-weight:500; letter-spacing:-.025em; line-height:1.35;
+    }
+    .wr-p2 {
+      font-size:clamp(1.125rem,2vw,1.75rem);
+      font-weight:500; margin-top:2.5rem; line-height:1.35;
+    }
+    /* Default state — JS sets opacity per word */
+    .word { display:inline; opacity:.15; }
+    /* Color per word type (static — JS only controls opacity) */
+    .wr-p1 .word        { color:hsl(var(--hero-subtitle)); }
+    .wr-p1 .word.hi     { color:hsl(var(--foreground)); }
+    .wr-p2 .word        { color:hsl(var(--foreground)); }
+
+    /* ============================================================
+       SECTION: NOTRE CUISINE (Solution)
+       ============================================================ */
+    #cuisine {
+      border-top:1px solid rgba(255,255,255,.1);
+      padding:clamp(8rem,11vw,11rem) 1.5rem;
+    }
+    .cuisine-inner { max-width:75rem; margin:0 auto; }
+
+    .s-label {
+      display:block; font-size:.75rem; letter-spacing:.2em;
+      text-transform:uppercase; color:hsl(var(--muted-foreground));
+      margin-bottom:1.25rem;
+    }
+    .cuisine-h2 {
+      font-size:clamp(2rem,5vw,3.75rem);
+      font-weight:500; letter-spacing:-.025em;
+      line-height:1.1; max-width:48rem; margin-bottom:3.5rem;
+    }
+
+    .cuisine-vid-wrap {
+      width:100%; aspect-ratio:3/1; border-radius:1rem;
+      overflow:hidden; margin-bottom:3.5rem; background:#080808;
+    }
+    .cuisine-vid { width:100%; height:100%; object-fit:cover; display:block; }
+
+    .features {
+      display:grid; grid-template-columns:1fr 1fr; gap:2rem;
+    }
+    @media (min-width:768px) {
+      .features { grid-template-columns:repeat(4,1fr); }
+    }
+    .feat-title { font-size:1rem; font-weight:600; margin-bottom:.5rem; }
+    .feat-desc  { font-size:.875rem; color:hsl(var(--muted-foreground)); line-height:1.6; }
+
+    /* ============================================================
+       SECTION: RÉSERVATION CTA
+       ============================================================ */
+    #reservation {
+      position:relative; overflow:hidden;
+      border-top:1px solid rgba(255,255,255,.1);
+      padding:clamp(8rem,11vw,11rem) 1.5rem;
+    }
+    .cta-vid {
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; z-index:0;
+    }
+    /* Animated fallback bg */
+    .cta-atmo {
+      position:absolute; inset:0; z-index:0;
+      background:radial-gradient(ellipse 120% 80% at 50% 50%, #0d0d0d 0%, #000 100%);
+      animation: ctaPulse 8s ease-in-out infinite;
+    }
+    @keyframes ctaPulse {
+      0%,100% { opacity:1; }
+      50%      { opacity:.55; }
+    }
+    .cta-overlay { position:absolute; inset:0; background:rgba(0,0,0,.45); z-index:1; }
+
+    .cta-content {
+      position:relative; z-index:2;
+      max-width:42rem; margin:0 auto; text-align:center;
+      display:flex; flex-direction:column; align-items:center;
+    }
+
+    /* Concentric mark (large) */
+    .cm-lg { position:relative; display:inline-flex; align-items:center; justify-content:center; }
+    .cm-lg .o { width:2.5rem; height:2.5rem; border-radius:50%; border:2px solid rgba(255,255,255,.6); display:block; }
+    .cm-lg .i { position:absolute; width:1.25rem; height:1.25rem; border-radius:50%; border:1px solid rgba(255,255,255,.6); }
+
+    .cta-h2 {
+      font-size:clamp(2.5rem,6vw,4.5rem);
+      font-weight:500; letter-spacing:-.025em;
+      line-height:1.1; margin-top:2rem; margin-bottom:1.5rem;
+    }
+    .cta-sub {
+      font-size:1.125rem; color:hsl(var(--muted-foreground));
+      max-width:28rem; margin-bottom:2.5rem; line-height:1.6;
+    }
+    .cta-btns {
+      display:flex; flex-direction:column; align-items:center; gap:1rem;
+    }
+    @media (min-width:640px) { .cta-btns { flex-direction:row; } }
+
+    .btn-solid {
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:.875rem 2rem; background:#fff; color:#000;
+      border-radius:.5rem; font-size:.875rem; font-weight:600;
+      font-family:inherit; cursor:pointer; text-decoration:none;
+      border:none; transition:transform .2s;
+    }
+    .btn-solid:hover  { transform:scale(1.03); }
+    .btn-solid:active { transform:scale(.98); }
+
+    .btn-glass-rect {
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:.875rem 2rem; border-radius:.5rem;
+      font-size:.875rem; font-weight:600;
+      font-family:inherit; cursor:pointer; color:#fff;
+      text-decoration:none; transition:transform .2s;
+    }
+    .btn-glass-rect:hover  { transform:scale(1.03); }
+    .btn-glass-rect:active { transform:scale(.98); }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    #footer {
+      display:flex; flex-direction:column; align-items:center;
+      gap:1rem; padding:3rem 2rem;
+    }
+    @media (min-width:768px) {
+      #footer { flex-direction:row; justify-content:space-between; padding:3rem 7rem; }
+    }
+    .foot-copy { font-size:.875rem; color:hsl(var(--muted-foreground)); }
+    .foot-links { display:flex; align-items:center; gap:1.5rem; list-style:none; }
+    .foot-links a {
+      font-size:.875rem; color:hsl(var(--muted-foreground));
+      text-decoration:none; transition:color .2s;
+    }
+    .foot-links a:hover { color:#fff; }
+  </style>
+</head>
+
+<body>
+
+<!-- ================================================================
+     NAVBAR
+     ================================================================ -->
+<header id="nav" role="banner">
+  <nav class="nav-row" aria-label="Navigation principale">
+
+    <a href="#" class="brand" aria-label="La Prima Bohème — Accueil">
+      <span class="cm" aria-hidden="true">
+        <span class="cm-o"></span>
+        <span class="cm-i"></span>
+      </span>
+      <span class="brand-name">La Prima Bohème</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#hero">Accueil</a></li>
+      <li><span class="nav-sep" aria-hidden="true">•</span><a href="#cuisine">Notre Carte</a></li>
+      <li><span class="nav-sep" aria-hidden="true">•</span><a href="#histoire">Notre Histoire</a></li>
+      <li><span class="nav-sep" aria-hidden="true">•</span><a href="#reservation">Réservations</a></li>
+    </ul>
+
+    <div class="nav-socials" aria-label="Réseaux sociaux">
+      <!-- Instagram -->
+      <a href="#" class="soc-btn liquid-glass" aria-label="Instagram">
+        <svg viewBox="0 0 24 24">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+        </svg>
+      </a>
+      <!-- Facebook -->
+      <a href="#" class="soc-btn liquid-glass" aria-label="Facebook">
+        <svg viewBox="0 0 24 24">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+        </svg>
+      </a>
+      <!-- Maps / localisation -->
+      <a href="#" class="soc-btn liquid-glass" aria-label="Nous localiser">
+        <svg viewBox="0 0 24 24">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </a>
+    </div>
+  </nav>
+</header>
+
+
+<!-- ================================================================
+     HERO
+     ================================================================ -->
+<section id="hero" aria-labelledby="hero-h1">
+
+  <!-- Background video — remplacer src par votre vidéo -->
+  <video class="hero-vid" autoplay loop muted playsinline aria-hidden="true">
+    <!-- <source src="votre-video-hero.mp4" type="video/mp4"> -->
+  </video>
+  <div class="hero-atmo" aria-hidden="true"></div>
+  <div class="hero-fade" aria-hidden="true"></div>
+
+  <div class="hero-content">
+
+    <!-- Avatar row -->
+    <div class="hero-avatars fu" aria-label="+500 convives satisfaits">
+      <div class="avatars-row" aria-hidden="true">
+        <span class="av">
+          <svg viewBox="0 0 32 32"><defs><radialGradient id="av1" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#2c2c2c"/><stop offset="100%" stop-color="#0d0d0d"/></radialGradient></defs><circle cx="16" cy="16" r="16" fill="url(#av1)"/><circle cx="16" cy="13" r="5.2" fill="rgba(237,237,237,.92)"/><ellipse cx="16" cy="30" rx="10.5" ry="11" fill="rgba(237,237,237,.92)"/></svg>
+        </span>
+        <span class="av">
+          <svg viewBox="0 0 32 32"><defs><radialGradient id="av2" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#3a3a3a"/><stop offset="100%" stop-color="#121212"/></radialGradient></defs><circle cx="16" cy="16" r="16" fill="url(#av2)"/><circle cx="16" cy="13" r="5.2" fill="rgba(255,255,255,.88)"/><ellipse cx="16" cy="30" rx="10.5" ry="11" fill="rgba(255,255,255,.88)"/></svg>
+        </span>
+        <span class="av">
+          <svg viewBox="0 0 32 32"><defs><radialGradient id="av3" cx="50%" cy="30%" r="80%"><stop offset="0%" stop-color="#232323"/><stop offset="100%" stop-color="#090909"/></radialGradient></defs><circle cx="16" cy="16" r="16" fill="url(#av3)"/><circle cx="16" cy="13" r="5.2" fill="rgba(214,214,214,.9)"/><ellipse cx="16" cy="30" rx="10.5" ry="11" fill="rgba(214,214,214,.9)"/></svg>
+        </span>
+      </div>
+      <span class="avatars-label">+500 convives conquis chaque mois</span>
+    </div>
+
+    <h1 id="hero-h1" class="hero-h1 fu" data-d="1">
+      L'<span class="serif">Italie</span> au cœur de Toulouse
+    </h1>
+
+    <p class="hero-sub fu" data-d="2">
+      Pizzas napolitaines, pâtes fraîches maison et vins d'Italie — dans une ambiance bohème et chaleureuse au cœur de la Ville Rose.
+    </p>
+
+    <form class="hero-form liquid-glass fu" data-d="3" onsubmit="return false" aria-label="Réservation rapide">
+      <input class="hero-input" type="tel" placeholder="Votre numéro de téléphone" aria-label="Numéro de téléphone" />
+      <button type="submit" class="btn-pill">RÉSERVER</button>
+    </form>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     LA RESTAURATION A CHANGÉ
+     ================================================================ -->
+<section id="evolved" aria-labelledby="evolved-h2">
+  <div class="evolved-inner">
+
+    <h2 id="evolved-h2" class="s-h2 fu">
+      La restauration a <span class="serif">changé.</span> Et vous&nbsp;?
+    </h2>
+
+    <p class="s-sub fu" data-d="1">
+      La façon de vivre une table a profondément évolué. L'expérience se cherche, les émotions se partagent — c'est précisément là que vos convives font leurs choix.
+    </p>
+
+    <div class="pillars">
+
+      <!-- Authenticité — rosette (3 ellipses) -->
+      <div class="pillar fu">
+        <div class="p-icon" aria-hidden="true">
+          <svg viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="50" cy="50" rx="18" ry="38"/>
+            <ellipse cx="50" cy="50" rx="18" ry="38" transform="rotate(60 50 50)"/>
+            <ellipse cx="50" cy="50" rx="18" ry="38" transform="rotate(120 50 50)"/>
+          </svg>
+        </div>
+        <h3 class="p-name">L'Authenticité</h3>
+        <p class="p-desc">Recettes napolitaines transmises de génération en génération, pâte à fermentation lente de 48 heures.</p>
+      </div>
+
+      <!-- Ambiance — carré + losange -->
+      <div class="pillar fu" data-d="1">
+        <div class="p-icon" aria-hidden="true">
+          <svg viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="24" y="24" width="52" height="52" rx="6"/>
+            <rect x="24" y="24" width="52" height="52" rx="6" transform="rotate(45 50 50)"/>
+            <line x1="50" y1="16" x2="50" y2="84"/>
+          </svg>
+        </div>
+        <h3 class="p-name">L'Ambiance</h3>
+        <p class="p-desc">Un cadre bohème et chaleureux unique en son genre, au cœur du quartier Capitole à Toulouse.</p>
+      </div>
+
+      <!-- Partage — étoile à 4 branches (sparkle) -->
+      <div class="pillar fu" data-d="2">
+        <div class="p-icon" aria-hidden="true">
+          <svg viewBox="0 0 100 100">
+            <path d="M50 12 C53 35,65 47,88 50 C65 53,53 65,50 88 C47 65,35 53,12 50 C35 47,47 35,50 12Z" fill="#fff"/>
+            <path d="M77 23 C78 29,81 32,87 33 C81 34,78 37,77 43 C76 37,73 34,67 33 C73 32,76 29,77 23Z" fill="#fff" opacity=".8"/>
+          </svg>
+        </div>
+        <h3 class="p-name">Le Partage</h3>
+        <p class="p-desc">Des assiettes généreuses pensées pour être partagées, des moments conçus pour durer toute la soirée.</p>
+      </div>
+
+    </div>
+
+    <p class="tagline fu" data-d="1">
+      Si vous n'êtes pas à table, quelqu'un d'autre le sera.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     NOTRE HISTOIRE — word reveal
+     ================================================================ -->
+<section id="histoire" aria-labelledby="histoire-label">
+  <div class="histoire-inner">
+
+    <div class="hist-vid-wrap fu" aria-label="Notre restaurant" role="img">
+      <!-- Remplacer par votre vidéo -->
+      <video class="hist-vid" autoplay loop muted playsinline aria-hidden="true">
+        <!-- <source src="votre-video-histoire.mp4" type="video/mp4"> -->
+      </video>
+      <div class="hist-vid-label" aria-hidden="true">La Prima Bohème</div>
+    </div>
+
+    <div class="wr-wrap" id="word-reveal" aria-label="Notre histoire" role="region">
+      <p class="wr-p1" aria-label=""></p>
+      <p class="wr-p2" aria-label=""></p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     NOTRE CUISINE (Solution)
+     ================================================================ -->
+<section id="cuisine" aria-labelledby="cuisine-h2">
+  <div class="cuisine-inner">
+
+    <span class="s-label fu">NOTRE CARTE</span>
+
+    <h2 id="cuisine-h2" class="cuisine-h2 fu" data-d="1">
+      La maison de la <span class="serif">belle</span> cuisine
+    </h2>
+
+    <div class="cuisine-vid-wrap fu" data-d="2" aria-label="Notre cuisine en images" role="img">
+      <!-- Remplacer par votre vidéo -->
+      <video class="cuisine-vid" autoplay loop muted playsinline aria-hidden="true">
+        <!-- <source src="votre-video-cuisine.mp4" type="video/mp4"> -->
+      </video>
+    </div>
+
+    <div class="features">
+      <div class="fu">
+        <h3 class="feat-title">Pizzas al Forno</h3>
+        <p class="feat-desc">Pâte à maturazione lente, cuisson sur pierre réfractaire à très haute température.</p>
+      </div>
+      <div class="fu" data-d="1">
+        <h3 class="feat-title">Pâtes Fraîches</h3>
+        <p class="feat-desc">Façonnées chaque matin dans notre cuisine, avec des farines italiennes d'exception.</p>
+      </div>
+      <div class="fu" data-d="2">
+        <h3 class="feat-title">Vins d'Italie</h3>
+        <p class="feat-desc">Une sélection raisonnée de vins naturels des plus belles régions de la péninsule.</p>
+      </div>
+      <div class="fu" data-d="3">
+        <h3 class="feat-title">L'Accueil</h3>
+        <p class="feat-desc">Chaleureux, sincère et à la bohémienne — parce que l'hospitalité fait partie de la recette.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     RÉSERVATION CTA
+     ================================================================ -->
+<section id="reservation" aria-labelledby="cta-h2">
+
+  <video id="cta-vid" class="cta-vid" autoplay loop muted playsinline aria-hidden="true"></video>
+  <div class="cta-atmo" aria-hidden="true"></div>
+  <div class="cta-overlay" aria-hidden="true"></div>
+
+  <div class="cta-content">
+
+    <div class="cm-lg fu" aria-hidden="true">
+      <span class="o"></span>
+      <span class="i"></span>
+    </div>
+
+    <h2 id="cta-h2" class="cta-h2 fu" data-d="1">
+      Réservez Votre <span class="serif">Table</span>
+    </h2>
+
+    <p class="cta-sub fu" data-d="2">
+      Que vous veniez pour un déjeuner en semaine ou un dîner en bonne compagnie, votre table vous attend.
+    </p>
+
+    <div class="cta-btns fu" data-d="3">
+      <a href="tel:+33500000000" class="btn-solid">Réserver Maintenant</a>
+      <a href="#cuisine" class="btn-glass-rect liquid-glass">Voir la Carte</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer id="footer" role="contentinfo">
+  <p class="foot-copy">© 2026 La Prima Bohème · Toulouse. Tous droits réservés.</p>
+  <ul class="foot-links" role="list">
+    <li><a href="#">Mentions légales</a></li>
+    <li><a href="#">Confidentialité</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
+<script>
+'use strict';
+
+/* ------------------------------------------------------------------
+   1. WORD REVEAL — scroll-driven opacity (replicates Framer Motion
+      useScroll + useTransform over [i/total, (i+1)/total] → [0.15, 1])
+   ------------------------------------------------------------------ */
+const P1 = "Nous avons créé un espace où la passion rencontre la tradition — où les convives trouvent l'authenticité, les artisans trouvent leur voix, et chaque assiette devient une histoire qui mérite d'être vécue.";
+const P2 = "Une table où la cuisine, la convivialité et l'émotion se fondent — avec moins d'artifice, moins de superflu, et davantage de sincérité pour chacun.";
+const P1_HIGHLIGHT = new Set(["passion", "rencontre", "tradition"]);
+
+function stripPunct(w) { return w.replace(/[.,—–\-«»'!?]/g, ''); }
+
+function buildWords(text, isP2, containerEl) {
+  containerEl.innerHTML = text.split(' ').map(w => {
+    const clean = stripPunct(w);
+    const hi    = !isP2 && P1_HIGHLIGHT.has(clean);
+    return `<span class="word${hi ? ' hi' : ''}">${w} </span>`;
+  }).join('');
+}
+
+function initWordReveal() {
+  const section = document.getElementById('word-reveal');
+  if (!section) return;
+
+  buildWords(P1, false, section.querySelector('.wr-p1'));
+  buildWords(P2, true,  section.querySelector('.wr-p2'));
+
+  const words = section.querySelectorAll('.word');
+  const total = words.length;
+
+  function update() {
+    const rect = section.getBoundingClientRect();
+    const vh   = window.innerHeight;
+    // Progress: 0 when section top hits 85 % of viewport, 1 when bottom hits 50 %
+    const prog = Math.max(0, Math.min(1,
+      (0.85 * vh - rect.top) / (rect.height + 0.35 * vh)
+    ));
+    words.forEach((w, i) => {
+      const start = i / total, end = (i + 1) / total;
+      const wp    = (prog - start) / (end - start);
+      w.style.opacity = (0.15 + 0.85 * Math.max(0, Math.min(1, wp))).toFixed(3);
+    });
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  requestAnimationFrame(update);
+}
+
+/* ------------------------------------------------------------------
+   2. FADE-UP via IntersectionObserver (replaces Framer whileInView)
+   ------------------------------------------------------------------ */
+function initFadeUp() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
+  }, { threshold: 0.05, rootMargin: '-80px 0px 0px 0px' });
+
+  document.querySelectorAll('.fu').forEach(el => io.observe(el));
+}
+
+/* ------------------------------------------------------------------
+   3. HLS.JS — CTA background video
+      Replace the empty string below with your HLS stream URL.
+      e.g. 'https://stream.mux.com/XXXXX.m3u8'
+   ------------------------------------------------------------------ */
+function initHls() {
+  const video = document.getElementById('cta-vid');
+  const src   = ''; // ← votre URL HLS ici
+
+  if (!src) return;
+
+  if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(src);
+    hls.attachMedia(video);
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = src; // Safari native HLS
+  }
+}
+
+/* ------------------------------------------------------------------
+   4. BOOT
+   ------------------------------------------------------------------ */
+document.addEventListener('DOMContentLoaded', () => {
+  initWordReveal();
+  initFadeUp();
+  initHls();
+});
+</script>
+
+</body>
+</html>
