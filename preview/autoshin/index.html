@@ -74,6 +74,21 @@ h1.hero-title{font-size:clamp(2.6rem,5.5vw,4.2rem);line-height:1.1;font-weight:7
 @keyframes dropFall{0%{opacity:0;transform:translateY(-10px)}60%{opacity:1}100%{opacity:0;transform:translateY(20px)}}
 .drop:nth-child(2){animation-delay:.4s}
 .drop:nth-child(3){animation-delay:.8s}
+.hero-photo-frame{border-radius:24px;overflow:hidden;position:relative;border:1px solid rgba(201,168,76,.25);box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 60px rgba(201,168,76,.08)}
+.hero-photo{width:100%;display:block;height:420px;object-fit:cover;object-position:center}
+.hero-photo-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,7,10,.15) 0%,transparent 35%,rgba(6,7,10,.5) 100%)}
+.hero-drops{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero-drop{position:absolute;top:-10px;width:2px;border-radius:50%;background:linear-gradient(180deg,transparent,rgba(150,210,255,.9),transparent);animation:dropFall 2.5s ease-in infinite}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:220px 220px;gap:12px;margin-top:44px}
+.gallery-item{border-radius:16px;overflow:hidden;position:relative;cursor:pointer}
+.gallery-item.tall{grid-row:span 2}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease);display:block}
+.gallery-item:hover img{transform:scale(1.07)}
+.gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:14px 16px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85));color:#fff;font-size:.82rem;font-weight:500;opacity:0;transform:translateY(8px);transition:all .3s var(--ease)}
+.gallery-item:hover .gallery-caption{opacity:1;transform:translateY(0)}
+.gallery-badge{position:absolute;top:12px;left:12px;background:rgba(201,168,76,.18);border:1px solid rgba(201,168,76,.4);color:var(--gold);font-size:.7rem;font-weight:600;padding:3px 10px;border-radius:50px;backdrop-filter:blur(8px);letter-spacing:.08em;text-transform:uppercase}
+@media(max-width:900px){.gallery-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto}.gallery-item.tall{grid-row:span 1}.gallery-item{aspect-ratio:4/3}}
+@media(max-width:600px){.gallery-grid{grid-template-columns:1fr}}
 
 /* SECTION COMMON */
 section{position:relative;z-index:1;padding:90px 5%}
@@ -116,9 +131,10 @@ section{position:relative;z-index:1;padding:90px 5%}
 
 /* BEFORE/AFTER */
 .ba-container{position:relative;border-radius:20px;overflow:hidden;max-width:800px;margin:50px auto 0;aspect-ratio:16/9;cursor:col-resize;user-select:none}
-.ba-before,.ba-after{position:absolute;inset:0;background-size:cover;background-position:center}
-.ba-before{background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 40%,#1a1a1a 100%);display:flex;align-items:center;justify-content:center}
-.ba-after{clip-path:inset(0 50% 0 0);background:linear-gradient(135deg,#0a0f1a 0%,#1a2a1a 40%,#0f1a0a 100%);display:flex;align-items:center;justify-content:center;transition:clip-path .05s}
+.ba-before,.ba-after{position:absolute;inset:0;overflow:hidden}
+.ba-before{filter:grayscale(65%) brightness(.62) sepia(.18)}
+.ba-after{clip-path:inset(0 50% 0 0);transition:clip-path .05s}
+.ba-img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 .ba-label{position:absolute;bottom:16px;font-size:.8rem;font-weight:600;letter-spacing:.1em;padding:4px 12px;border-radius:50px;backdrop-filter:blur(8px)}
 .ba-label-before{left:16px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.15);color:var(--muted)}
 .ba-label-after{right:16px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gold)}
@@ -222,6 +238,7 @@ footer{border-top:1px solid var(--border);padding:50px 5% 30px;position:relative
   <span class="logo">AutoShin</span>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
+    <li><a href="#galerie">Galerie</a></li>
     <li><a href="#tarifs">Tarifs</a></li>
     <li><a href="#avis">Avis</a></li>
     <li><a href="#zone">Zone</a></li>
@@ -237,6 +254,7 @@ footer{border-top:1px solid var(--border);padding:50px 5% 30px;position:relative
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-close" id="closeMenu">✕</button>
   <a href="#services" onclick="closeMob()">Services</a>
+  <a href="#galerie" onclick="closeMob()">Galerie</a>
   <a href="#tarifs" onclick="closeMob()">Tarifs</a>
   <a href="#avis" onclick="closeMob()">Avis</a>
   <a href="#zone" onclick="closeMob()">Zone</a>
@@ -275,10 +293,23 @@ footer{border-top:1px solid var(--border);padding:50px 5% 30px;position:relative
     </div>
   </div>
 
-  <!-- ANIMATED CAR SVG -->
+  <!-- HERO PHOTO -->
   <div class="hero-img">
-    <svg class="car-scene" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
-      <defs>
+    <div class="hero-photo-frame">
+      <img src="https://images.unsplash.com/photo-1607860108855-64acf2078ed9?auto=format&fit=crop&w=900&q=85"
+           alt="Nettoyage automobile professionnel à domicile Toulouse"
+           class="hero-photo" width="900" height="600" loading="eager">
+      <div class="hero-photo-overlay"></div>
+      <div class="hero-drops">
+        <div class="hero-drop" style="left:18%;height:20px;animation-delay:0s"></div>
+        <div class="hero-drop" style="left:35%;height:14px;animation-delay:.8s"></div>
+        <div class="hero-drop" style="left:54%;height:24px;animation-delay:1.4s"></div>
+        <div class="hero-drop" style="left:71%;height:18px;animation-delay:2s"></div>
+        <div class="hero-drop" style="left:88%;height:13px;animation-delay:2.7s"></div>
+      </div>
+    </div>
+  </div>
+  <svg style="display:none"><defs>
         <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#2a2a3a"/>
           <stop offset="100%" stop-color="#141420"/>
@@ -386,7 +417,6 @@ footer{border-top:1px solid var(--border);padding:50px 5% 30px;position:relative
       <!-- Gold accent glow under car -->
       <ellipse cx="250" cy="282" rx="140" ry="6" fill="rgba(201,168,76,0.04)"/>
     </svg>
-  </div>
 </section>
 
 <!-- SERVICES -->
@@ -436,6 +466,45 @@ footer{border-top:1px solid var(--border);padding:50px 5% 30px;position:relative
       </div>
       <h3>Entretien Abonnement</h3>
       <p>Formule mensuelle ou bimensuelle pour garder votre véhicule impeccable toute l'année à prix réduit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="galerie">
+  <div class="section-tag reveal">Nos Réalisations</div>
+  <h2 class="section-title reveal">Le travail parle de lui-même</h2>
+  <p class="section-sub reveal">Résultats réels, clients réels, Toulouse et sa périphérie.</p>
+  <div class="gallery-grid">
+    <div class="gallery-item tall reveal">
+      <span class="gallery-badge">Détailing</span>
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=700&q=80"
+           alt="Détailing professionnel carrosserie Toulouse" loading="lazy" width="700" height="933">
+      <div class="gallery-caption">Détailing complet – Porsche Cayenne</div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:.1s">
+      <span class="gallery-badge">Intérieur</span>
+      <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=700&q=80"
+           alt="Nettoyage intérieur cuir voiture" loading="lazy" width="700" height="525">
+      <div class="gallery-caption">Cuir traité & brillant – BMW Série 5</div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:.2s">
+      <span class="gallery-badge">Céramique</span>
+      <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=700&q=80"
+           alt="Protection céramique Porsche Toulouse" loading="lazy" width="700" height="525">
+      <div class="gallery-caption">Protection céramique 3 ans – Porsche 911</div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:.3s">
+      <span class="gallery-badge">Lustrage</span>
+      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80"
+           alt="Lustrage carrosserie Ferrari Toulouse" loading="lazy" width="700" height="525">
+      <div class="gallery-caption">Polish machine – Ferrari 458</div>
+    </div>
+    <div class="gallery-item reveal" style="transition-delay:.4s">
+      <span class="gallery-badge">Premium</span>
+      <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80"
+           alt="Résultat nettoyage premium voiture de sport" loading="lazy" width="700" height="525">
+      <div class="gallery-caption">Finition showroom – Lamborghini Huracán</div>
     </div>
   </div>
 </section>
@@ -514,33 +583,16 @@ footer{border-top:1px solid var(--border);padding:50px 5% 30px;position:relative
   <p class="section-sub reveal" style="text-align:center;margin:0 auto">Glissez le curseur pour voir la transformation.</p>
   <div class="ba-container reveal" id="baContainer">
     <!-- BEFORE -->
-    <svg class="ba-before" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <rect width="800" height="450" fill="#111"/>
-      <path d="M150 320 L150 260 Q160 240 185 228 L290 188 Q340 165 380 162 L480 162 Q540 162 580 188 L640 220 Q665 234 668 260 L668 320 Z" fill="#1e1e1e" stroke="#333" stroke-width="1.5"/>
-      <path d="M290 188 Q340 165 380 162 L480 162 Q540 162 580 188 L610 208 L565 208 Q545 175 510 172 L380 172 Q350 172 320 195 Z" fill="#252525"/>
-      <!-- Dirty streaks -->
-      <path d="M180 250 Q300 240 550 248" stroke="#0a0a0a" stroke-width="3" fill="none" opacity=".6"/>
-      <path d="M200 270 Q350 258 600 266" stroke="#0a0a0a" stroke-width="2" fill="none" opacity=".4"/>
-      <g opacity=".5">
-        <rect x="160" y="230" width="8" height="3" rx="1" fill="#090909"/>
-        <rect x="300" y="220" width="12" height="2" rx="1" fill="#080808"/>
-        <rect x="480" y="235" width="10" height="3" rx="1" fill="#090909"/>
-        <rect x="580" y="228" width="7" height="2" rx="1" fill="#080808"/>
-        <rect x="420" y="215" width="9" height="2" rx="1" fill="#080808"/>
-      </g>
-      <!-- Dirty wheels -->
-      <circle cx="250" cy="340" r="42" fill="#0e0e0e" stroke="#222" stroke-width="2"/>
-      <circle cx="250" cy="340" r="28" fill="#161616" stroke="#1a1a1a" stroke-width="1"/>
-      <circle cx="560" cy="340" r="42" fill="#0e0e0e" stroke="#222" stroke-width="2"/>
-      <circle cx="560" cy="340" r="28" fill="#161616" stroke="#1a1a1a" stroke-width="1"/>
-      <!-- Mud -->
-      <ellipse cx="250" cy="370" rx="50" ry="8" fill="rgba(20,15,10,0.6)"/>
-      <ellipse cx="560" cy="370" rx="50" ry="8" fill="rgba(20,15,10,0.6)"/>
-      <text x="400" y="430" text-anchor="middle" fill="#444" font-family="sans-serif" font-size="13" letter-spacing="2">AVANT</text>
-    </svg>
+    <div class="ba-before">
+      <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80"
+           class="ba-img" alt="Voiture sale avant nettoyage" width="1200" height="675" loading="lazy">
+    </div>
     <!-- AFTER -->
-    <svg class="ba-after" id="baAfter" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
+    <div class="ba-after" id="baAfter">
+      <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80"
+           class="ba-img" alt="Voiture propre et brillante après nettoyage AutoShin" width="1200" height="675" loading="lazy">
+    </div>
+    <svg style="display:none"><defs>
         <linearGradient id="cleanBody" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#1a1a2e"/>
           <stop offset="100%" stop-color="#0d0d18"/>
