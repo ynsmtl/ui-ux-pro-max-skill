@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Identity Board – Nettoyage Auto Toulouse</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08090c;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--gold:#c9a84c;--gold2:#f0d080;--gold3:#8a6820;--text:#edeef2;--muted:#8a8f98;--radius:16px;--ease:cubic-bezier(.16,1,.3,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px}
+.page{max-width:1100px;margin:0 auto;padding:60px 30px 100px}
+
+/* HEADER */
+.brand-header{text-align:center;padding:60px 0 80px;border-bottom:1px solid var(--border);margin-bottom:70px;position:relative}
+.brand-header::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.label{font-size:.7rem;letter-spacing:.2em;color:var(--gold);font-weight:600;text-transform:uppercase;margin-bottom:16px}
+.brand-header h1{font-family:'Bodoni Moda',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;margin-bottom:12px}
+.brand-header p{color:var(--muted);font-size:1rem;max-width:500px;margin:0 auto}
+
+/* SECTION */
+.section{margin-bottom:80px}
+.section-label{font-size:.7rem;letter-spacing:.2em;color:var(--gold);font-weight:600;text-transform:uppercase;margin-bottom:8px}
+.section h2{font-family:'Bodoni Moda',serif;font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.section p.desc{color:var(--muted);font-size:.9rem;margin-bottom:36px;max-width:560px}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:70px 0}
+
+/* NAME CARDS */
+.names-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.name-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 26px;transition:border-color .3s,transform .3s var(--ease)}
+.name-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-4px)}
+.name-card.pick{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.05);position:relative}
+.name-card.pick::after{content:'Recommandé';position:absolute;top:16px;right:16px;background:linear-gradient(135deg,var(--gold),var(--gold3));color:#000;font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:50px;letter-spacing:.06em}
+.name-main{font-family:'Bodoni Moda',serif;font-size:1.9rem;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1}
+.name-sub{font-size:.8rem;color:var(--gold);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+.name-desc{color:var(--muted);font-size:.875rem;line-height:1.6;margin-bottom:14px}
+.name-tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.72rem;padding:3px 10px;border-radius:50px;border:1px solid var(--border);color:var(--muted)}
+.tag.g{border-color:rgba(201,168,76,.3);color:var(--gold)}
+.stars{display:flex;gap:2px;margin-bottom:10px}
+.star{color:var(--gold);font-size:.9rem}
+.star.empty{color:rgba(255,255,255,.15)}
+
+/* LOGO SHOWCASE */
+.logo-showcase{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.logo-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.logo-card-header{padding:10px 20px;border-bottom:1px solid var(--border);font-size:.75rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.02)}
+.logo-bg-dark{background:#06070a;display:flex;align-items:center;justify-content:center;padding:50px 30px;min-height:160px}
+.logo-bg-light{background:#f5f2ec;display:flex;align-items:center;justify-content:center;padding:50px 30px;min-height:160px}
+.logo-bg-gold{background:linear-gradient(135deg,#c9a84c,#a07830);display:flex;align-items:center;justify-content:center;padding:50px 30px;min-height:160px}
+.logo-variants{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.logo-variants>div{flex:1}
+.logo-variants>div+div{border-left:1px solid var(--border)}
+.logo-note{padding:14px 20px;font-size:.8rem;color:var(--muted);border-top:1px solid var(--border);background:rgba(255,255,255,.015)}
+
+/* PALETTE */
+.palette-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.swatch{border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.swatch-color{height:100px}
+.swatch-info{padding:12px 14px;background:var(--surface)}
+.swatch-name{font-size:.8rem;font-weight:600;margin-bottom:2px}
+.swatch-hex{font-size:.75rem;color:var(--muted);font-family:monospace}
+.swatch-use{font-size:.72rem;color:var(--muted);margin-top:4px}
+
+/* TYPOGRAPHY */
+.type-samples{display:flex;flex-direction:column;gap:24px}
+.type-row{display:flex;align-items:baseline;gap:24px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.type-meta{width:140px;flex-shrink:0}
+.type-label{font-size:.72rem;color:var(--gold);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.type-spec{font-size:.75rem;color:var(--muted);margin-top:4px}
+.type-sample{flex:1;color:var(--text)}
+
+/* VOICE */
+.voice-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.voice-card{padding:22px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.voice-card h4{font-size:.8rem;font-weight:600;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.voice-card ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.voice-card ul li{font-size:.875rem;color:var(--muted);display:flex;align-items:flex-start;gap:8px}
+.voice-card ul li::before{content:'';width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:2px;background-size:12px;background-repeat:no-repeat;background-position:center}
+.voice-do li::before{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 7l3.5 3.5L12 4' stroke='%23c9a84c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")}
+.voice-dont li::before{background:rgba(180,60,60,.1);border:1px solid rgba(180,60,60,.3);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M4 4l6 6M10 4l-6 6' stroke='%23b44040' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")}
+
+.copy-examples{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.copy-ex{padding:18px 20px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.copy-context{font-size:.72rem;color:var(--gold);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.copy-text{font-size:.92rem;color:var(--text);font-style:italic;line-height:1.6}
+
+/* ICONS */
+.icon-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+.icon-box{width:60px;height:60px;border-radius:14px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+.icon-box span{font-size:.6rem;color:var(--muted);text-align:center}
+
+/* DOMAIN */
+.domain-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.domain-item{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border:1px solid var(--border);border-radius:10px;background:var(--surface)}
+.domain-name{font-family:monospace;font-size:.85rem;color:var(--text)}
+.domain-badge{font-size:.72rem;padding:2px 10px;border-radius:50px;font-weight:600}
+.avail{background:rgba(40,180,100,.1);border:1px solid rgba(40,180,100,.3);color:#40c070}
+.check{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);color:var(--gold)}
+
+@media(max-width:700px){.voice-grid{grid-template-columns:1fr}.type-row{flex-direction:column}.type-meta{width:100%}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="brand-header">
+  <div class="label">Brand Identity Board</div>
+  <h1>Nettoyage Automobile Premium<br>— Toulouse</h1>
+  <p>Nom, logo, palette, typographie & voix de marque pour votre service à domicile.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 1. NOMS -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Étape 1</div>
+  <h2>Sélection de noms</h2>
+  <p class="desc">5 noms étudiés pour leur mémorabilité, leur posture premium, et leur disponibilité en .fr — du plus recommandé au plus alternatif.</p>
+
+  <div class="names-grid">
+
+    <!-- ÉCLAT (recommended) -->
+    <div class="name-card pick">
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+      <div class="name-main">Éclat</div>
+      <div class="name-sub">Éclat Auto · Toulouse</div>
+      <p class="name-desc">Du français « éclat » : brillance, lustre, explosion de lumière. Court, élégant, international. Fonctionne tel quel en anglais (« eclat ») et en espagnol. Évoque à la fois la brillance de la carrosserie et l'excellence du service.</p>
+      <div class="name-tags">
+        <span class="tag g">Court (5 lettres)</span>
+        <span class="tag g">100% français</span>
+        <span class="tag g">International</span>
+        <span class="tag">Luxe automobile</span>
+        <span class="tag">Mémorable</span>
+      </div>
+    </div>
+
+    <!-- LUSTRO -->
+    <div class="name-card">
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+      <div class="name-main">Lustro</div>
+      <div class="name-sub">Lustro Detailing</div>
+      <p class="name-desc">Dérivé de « lustrage » (polissage professionnel de carrosserie). Sonorité italienne qui évoque le luxe artisanal. Clair sur l'activité, mémorable, facilement prononçable partout en Europe.</p>
+      <div class="name-tags">
+        <span class="tag g">Métier évident</span>
+        <span class="tag g">Sonorité italienne</span>
+        <span class="tag">Artisanal</span>
+        <span class="tag">6 lettres</span>
+      </div>
+    </div>
+
+    <!-- VERNIX -->
+    <div class="name-card">
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span></div>
+      <div class="name-main">Vernix</div>
+      <div class="name-sub">Vernix Auto Care</div>
+      <p class="name-desc">Du latin « vernix » (vernis, enduit protecteur). Évoque la protection de la carrosserie et le revêtement céramique. Unique, distinctif, difficile à plagier. Positionnement très haut de gamme.</p>
+      <div class="name-tags">
+        <span class="tag g">Unique</span>
+        <span class="tag g">Protection/céramique</span>
+        <span class="tag">Latin</span>
+        <span class="tag">Distinctif</span>
+      </div>
+    </div>
+
+    <!-- L'ATELIER -->
+    <div class="name-card">
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span><span class="star empty">★</span></div>
+      <div class="name-main">L'Atelier</div>
+      <div class="name-sub">L'Atelier Détail · Toulouse</div>
+      <p class="name-desc">Positionne le service comme un artisanat de précision, un lieu de savoir-faire. Forte identité française. Légèrement plus long mais très premium. Idéal si vous voulez vous associer à l'univers du sur-mesure.</p>
+      <div class="name-tags">
+        <span class="tag g">Artisanat premium</span>
+        <span class="tag">100% français</span>
+        <span class="tag">Sur-mesure</span>
+      </div>
+    </div>
+
+    <!-- MIROIR -->
+    <div class="name-card">
+      <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star empty">★</span><span class="star empty">★</span></div>
+      <div class="name-main">Miroir</div>
+      <div class="name-sub">Miroir Auto</div>
+      <p class="name-desc">Du résultat final : un fini miroir, une carrosserie qui reflète tout. Très évocateur visuellement, facile à retenir. Le concept du « mirror finish » est un standard du détailing professionnel.</p>
+      <div class="name-tags">
+        <span class="tag g">Résultat visuel clair</span>
+        <span class="tag">Détailing</span>
+        <span class="tag">6 lettres</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 2. LOGOS ÉCLAT -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Étape 2 — Logo</div>
+  <h2>Concepts logo « Éclat »</h2>
+  <p class="desc">3 variantes du logo recommandé. La version primaire (sur fond sombre) est à utiliser en priorité sur le site, les réseaux et les supports print.</p>
+
+  <!-- VERSION A : Wordmark + burst -->
+  <div style="margin-bottom:20px">
+    <p style="font-size:.75rem;color:var(--muted);margin-bottom:12px;letter-spacing:.06em;text-transform:uppercase">Version A — Wordmark + Éclat symbole (principale)</p>
+    <div class="logo-variants">
+      <div>
+        <div class="logo-card-header">Sur fond sombre</div>
+        <div class="logo-bg-dark">
+          <svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg" width="260">
+            <defs>
+              <linearGradient id="gA1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#f0d080"/>
+                <stop offset="100%" stop-color="#c9a84c"/>
+              </linearGradient>
+              <linearGradient id="gA2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f0d080" stop-opacity=".9"/>
+                <stop offset="100%" stop-color="#c9a84c" stop-opacity=".6"/>
+              </linearGradient>
+            </defs>
+            <!-- Star burst symbol -->
+            <g transform="translate(28,40)">
+              <!-- Outer glow -->
+              <circle r="16" fill="rgba(201,168,76,.08)"/>
+              <!-- Main rays -->
+              <line x1="0" y1="-14" x2="0" y2="-22" stroke="url(#gA1)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="0" y1="14" x2="0" y2="22" stroke="url(#gA1)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="-14" y1="0" x2="-22" y2="0" stroke="url(#gA1)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="14" y1="0" x2="22" y2="0" stroke="url(#gA1)" stroke-width="1.5" stroke-linecap="round"/>
+              <!-- Diagonal rays (shorter) -->
+              <line x1="9.9" y1="-9.9" x2="14.1" y2="-14.1" stroke="url(#gA2)" stroke-width="1" stroke-linecap="round"/>
+              <line x1="-9.9" y1="-9.9" x2="-14.1" y2="-14.1" stroke="url(#gA2)" stroke-width="1" stroke-linecap="round"/>
+              <line x1="9.9" y1="9.9" x2="14.1" y2="14.1" stroke="url(#gA2)" stroke-width="1" stroke-linecap="round"/>
+              <line x1="-9.9" y1="9.9" x2="-14.1" y2="14.1" stroke="url(#gA2)" stroke-width="1" stroke-linecap="round"/>
+              <!-- Center diamond -->
+              <path d="M0 -7 L5 0 L0 7 L-5 0 Z" fill="url(#gA1)"/>
+            </g>
+            <!-- Wordmark -->
+            <text x="62" y="52" font-family="Bodoni Moda, Georgia, serif" font-size="38" font-weight="700" fill="url(#gA1)" letter-spacing="4">ÉCLAT</text>
+            <!-- Tagline -->
+            <text x="63" y="66" font-family="Jost, sans-serif" font-size="8.5" fill="rgba(201,168,76,0.55)" letter-spacing="4.5" font-weight="400">AUTO · TOULOUSE</text>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="logo-card-header">Sur fond clair</div>
+        <div class="logo-bg-light">
+          <svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg" width="260">
+            <defs>
+              <linearGradient id="gB1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#8a6820"/>
+                <stop offset="100%" stop-color="#c9a84c"/>
+              </linearGradient>
+            </defs>
+            <g transform="translate(28,40)">
+              <circle r="16" fill="rgba(138,104,32,.08)"/>
+              <line x1="0" y1="-14" x2="0" y2="-22" stroke="#a07830" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="0" y1="14" x2="0" y2="22" stroke="#a07830" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="-14" y1="0" x2="-22" y2="0" stroke="#a07830" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="14" y1="0" x2="22" y2="0" stroke="#a07830" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="9.9" y1="-9.9" x2="14.1" y2="-14.1" stroke="#c9a84c" stroke-width="1" stroke-linecap="round"/>
+              <line x1="-9.9" y1="-9.9" x2="-14.1" y2="-14.1" stroke="#c9a84c" stroke-width="1" stroke-linecap="round"/>
+              <line x1="9.9" y1="9.9" x2="14.1" y2="14.1" stroke="#c9a84c" stroke-width="1" stroke-linecap="round"/>
+              <line x1="-9.9" y1="9.9" x2="-14.1" y2="14.1" stroke="#c9a84c" stroke-width="1" stroke-linecap="round"/>
+              <path d="M0 -7 L5 0 L0 7 L-5 0 Z" fill="url(#gB1)"/>
+            </g>
+            <text x="62" y="52" font-family="Bodoni Moda, Georgia, serif" font-size="38" font-weight="700" fill="#1a1206" letter-spacing="4">ÉCLAT</text>
+            <text x="63" y="66" font-family="Jost, sans-serif" font-size="8.5" fill="#6b5218" letter-spacing="4.5" font-weight="400">AUTO · TOULOUSE</text>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="logo-card-header">Sur fond or</div>
+        <div class="logo-bg-gold">
+          <svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg" width="260">
+            <g transform="translate(28,40)">
+              <circle r="16" fill="rgba(0,0,0,.1)"/>
+              <line x1="0" y1="-14" x2="0" y2="-22" stroke="rgba(0,0,0,.7)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="0" y1="14" x2="0" y2="22" stroke="rgba(0,0,0,.7)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="-14" y1="0" x2="-22" y2="0" stroke="rgba(0,0,0,.7)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="14" y1="0" x2="22" y2="0" stroke="rgba(0,0,0,.7)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="9.9" y1="-9.9" x2="14.1" y2="-14.1" stroke="rgba(0,0,0,.5)" stroke-width="1" stroke-linecap="round"/>
+              <line x1="-9.9" y1="-9.9" x2="-14.1" y2="-14.1" stroke="rgba(0,0,0,.5)" stroke-width="1" stroke-linecap="round"/>
+              <line x1="9.9" y1="9.9" x2="14.1" y2="14.1" stroke="rgba(0,0,0,.5)" stroke-width="1" stroke-linecap="round"/>
+              <line x1="-9.9" y1="9.9" x2="-14.1" y2="14.1" stroke="rgba(0,0,0,.5)" stroke-width="1" stroke-linecap="round"/>
+              <path d="M0 -7 L5 0 L0 7 L-5 0 Z" fill="rgba(0,0,0,.8)"/>
+            </g>
+            <text x="62" y="52" font-family="Bodoni Moda, Georgia, serif" font-size="38" font-weight="700" fill="#000000" letter-spacing="4">ÉCLAT</text>
+            <text x="63" y="66" font-family="Jost, sans-serif" font-size="8.5" fill="rgba(0,0,0,0.55)" letter-spacing="4.5" font-weight="400">AUTO · TOULOUSE</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="logo-note">Fichier exportable en SVG · Utilisation : site web, réseaux, email, factures</div>
+  </div>
+
+  <!-- VERSION B : Monogramme É -->
+  <div style="margin-bottom:20px">
+    <p style="font-size:.75rem;color:var(--muted);margin-bottom:12px;letter-spacing:.06em;text-transform:uppercase">Version B — Monogramme (favicon, profil réseaux sociaux, stickers)</p>
+    <div class="logo-variants">
+      <div>
+        <div class="logo-card-header">Monogramme fond sombre</div>
+        <div class="logo-bg-dark">
+          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="110">
+            <defs>
+              <linearGradient id="gC" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#f0d080"/>
+                <stop offset="100%" stop-color="#c9a84c"/>
+              </linearGradient>
+            </defs>
+            <!-- Background circle -->
+            <circle cx="40" cy="40" r="38" fill="rgba(201,168,76,.08)" stroke="rgba(201,168,76,.25)" stroke-width="1"/>
+            <!-- É letter -->
+            <text x="40" y="57" text-anchor="middle" font-family="Bodoni Moda, Georgia, serif" font-size="46" font-weight="700" fill="url(#gC)">É</text>
+            <!-- Star burst top right -->
+            <g transform="translate(61,20)">
+              <line x1="0" y1="-6" x2="0" y2="-9" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="0" y1="6" x2="0" y2="9" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="-6" y1="0" x2="-9" y2="0" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="6" y1="0" x2="9" y2="0" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M0 -3 L2.5 0 L0 3 L-2.5 0Z" fill="#c9a84c"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="logo-card-header">Monogramme badge</div>
+        <div class="logo-bg-dark">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="110">
+            <defs>
+              <linearGradient id="gD" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#c9a84c"/>
+                <stop offset="100%" stop-color="#8a6820"/>
+              </linearGradient>
+            </defs>
+            <!-- Hexagon -->
+            <polygon points="50,4 93,27.5 93,72.5 50,96 7,72.5 7,27.5" fill="none" stroke="url(#gD)" stroke-width="1.5"/>
+            <polygon points="50,14 83,31.5 83,68.5 50,86 17,68.5 17,31.5" fill="rgba(201,168,76,.06)"/>
+            <!-- É -->
+            <text x="50" y="68" text-anchor="middle" font-family="Bodoni Moda, Georgia, serif" font-size="50" font-weight="700" fill="#c9a84c">É</text>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <div class="logo-card-header">Wordmark compact</div>
+        <div class="logo-bg-dark">
+          <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" width="200">
+            <defs>
+              <linearGradient id="gE" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#f0d080"/>
+                <stop offset="100%" stop-color="#c9a84c"/>
+              </linearGradient>
+            </defs>
+            <text x="16" y="50" font-family="Bodoni Moda, Georgia, serif" font-size="42" font-weight="700" fill="url(#gE)" letter-spacing="2">ÉCLAT</text>
+            <!-- Underline gradient -->
+            <rect x="16" y="56" width="168" height="1" fill="url(#gE)" opacity=".4"/>
+            <text x="16" y="70" font-family="Jost, sans-serif" font-size="8" fill="rgba(201,168,76,0.5)" letter-spacing="5.5" font-weight="300">TOULOUSE</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="logo-note">Monogramme : favicon, profil Instagram/Facebook, sticker voiture, broderie uniforme</div>
+  </div>
+
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 3. PALETTE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Étape 3</div>
+  <h2>Palette de couleurs</h2>
+  <p class="desc">5 couleurs définissent l'identité visuelle. Tout ce qui dépasse est hors-charte.</p>
+
+  <div class="palette-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:linear-gradient(135deg,#f0d080,#c9a84c)"></div>
+      <div class="swatch-info">
+        <div class="swatch-name" style="color:var(--gold)">Or Éclat</div>
+        <div class="swatch-hex">#C9A84C</div>
+        <div class="swatch-use">Couleur signature. Logos, CTA, accents, titres.</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#06070a"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Nuit Profonde</div>
+        <div class="swatch-hex">#06070A</div>
+        <div class="swatch-use">Fond principal. Backgrounds, sections sombres.</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#1a1c24"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Carbone</div>
+        <div class="swatch-hex">#1A1C24</div>
+        <div class="swatch-use">Surfaces. Cards, formulaires, navbars.</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#f5f2ec"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Ivoire</div>
+        <div class="swatch-hex">#F5F2EC</div>
+        <div class="swatch-use">Fond clair. Documents, factures, print.</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#8a8f98"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Platine</div>
+        <div class="swatch-hex">#8A8F98</div>
+        <div class="swatch-use">Texte secondaire. Sous-titres, méta, labels.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 4. TYPOGRAPHIE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Étape 4</div>
+  <h2>Système typographique</h2>
+  <p class="desc">2 polices Google Fonts (gratuites). Bodoni Moda pour le prestige, Jost pour la lisibilité.</p>
+
+  <div class="type-samples">
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-label">H1 · Titre héro</div>
+        <div class="type-spec">Bodoni Moda 700<br>clamp(2.6–4.2rem)</div>
+      </div>
+      <div class="type-sample" style="font-family:'Bodoni Moda',serif;font-size:2.8rem;font-weight:700;line-height:1.1;background:linear-gradient(135deg,#f0d080,#c9a84c);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Votre voiture,<br>comme neuve</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-label">H2 · Section</div>
+        <div class="type-spec">Bodoni Moda 700<br>clamp(1.8–2.8rem)</div>
+      </div>
+      <div class="type-sample" style="font-family:'Bodoni Moda',serif;font-size:2rem;font-weight:700">Des prix transparents, sans mauvaise surprise</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-label">H3 · Carte</div>
+        <div class="type-spec">Bodoni Moda 600<br>1.15rem</div>
+      </div>
+      <div class="type-sample" style="font-family:'Bodoni Moda',serif;font-size:1.15rem;font-weight:600">Traitement Céramique</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-label">Body · Texte courant</div>
+        <div class="type-spec">Jost 300–400<br>1rem / 1.6</div>
+      </div>
+      <div class="type-sample" style="font-family:'Jost',sans-serif;font-size:1rem;font-weight:300;color:var(--muted)">Protection longue durée jusqu'à 3 ans. Hydrophobicité maximale, résistance aux rayures superficielles. Nous venons chez vous dans tout Toulouse et sa périphérie.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-label">Label · Tags</div>
+        <div class="type-spec">Jost 600<br>0.7–0.8rem / +.15em</div>
+      </div>
+      <div class="type-sample" style="font-family:'Jost',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold)">NOS PRESTATIONS · TOULOUSE</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="type-label">Prix · Chiffres</div>
+        <div class="type-spec">Bodoni Moda 700<br>3rem / tabular</div>
+      </div>
+      <div class="type-sample" style="font-family:'Bodoni Moda',serif;font-size:2.6rem;font-weight:700">79<span style="font-family:'Jost';font-size:1rem;color:var(--muted)"> €/intervention</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 5. VOIX DE MARQUE -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Étape 5</div>
+  <h2>Voix de marque</h2>
+  <p class="desc">Comment Éclat Auto s'exprime en toutes circonstances. 3 traits de personnalité, appliqués systématiquement.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px">
+    <div style="padding:22px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:14px;text-align:center">
+      <div style="font-family:'Bodoni Moda',serif;font-size:1.3rem;font-weight:700;margin-bottom:6px">Expert</div>
+      <div style="font-size:.82rem;color:var(--muted)">On connaît notre métier mieux que quiconque. On ne survend pas, on livre.</div>
+    </div>
+    <div style="padding:22px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:14px;text-align:center">
+      <div style="font-family:'Bodoni Moda',serif;font-size:1.3rem;font-weight:700;margin-bottom:6px">Accessible</div>
+      <div style="font-size:.82rem;color:var(--muted)">Le luxe sans prétention. On s'adresse à tout le monde avec respect et clarté.</div>
+    </div>
+    <div style="padding:22px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:14px;text-align:center">
+      <div style="font-family:'Bodoni Moda',serif;font-size:1.3rem;font-weight:700;margin-bottom:6px">Local</div>
+      <div style="font-size:.82rem;color:var(--muted)">Fiers d'être toulousains. On parle de notre ville, pas d'une marque générique.</div>
+    </div>
+  </div>
+
+  <div class="voice-grid">
+    <div class="voice-card voice-do">
+      <h4>On dit ✓</h4>
+      <ul>
+        <li>« Votre voiture, comme neuve — chez vous. »</li>
+        <li>« Résultat showroom garanti ou on revient. »</li>
+        <li>« Protection céramique 3 ans, appliquée en 4h à votre domicile. »</li>
+        <li>« Simple : vous choisissez l'heure, on s'occupe du reste. »</li>
+        <li>« Fiers de servir Toulouse depuis 5 ans. »</li>
+      </ul>
+    </div>
+    <div class="voice-card voice-dont">
+      <h4>On ne dit jamais ✗</h4>
+      <ul>
+        <li>« Notre solution innovante de nettoyage… »</li>
+        <li>« Nous sommes leader du marché… »</li>
+        <li>« Profitez de notre offre exceptionnelle ! »</li>
+        <li>« Des tarifs imbattables pour un service de qualité ! »</li>
+        <li>« N'hésitez pas à nous contacter pour plus d'infos. »</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="copy-examples">
+    <div class="copy-ex">
+      <div class="copy-context">Instagram · Post résultat</div>
+      <div class="copy-text">« Ce Porsche Cayenne ne savait plus à quoi il ressemblait. 4h de travail plus tard — il s'en souvient. Détailing complet + céramique, Toulouse Capitole 🟡 »</div>
+    </div>
+    <div class="copy-ex">
+      <div class="copy-context">SMS de confirmation de réservation</div>
+      <div class="copy-text">« Bonjour Thomas, votre intervention Éclat Auto est confirmée demain 9h à votre adresse. On vous tient informé 30 min avant l'arrivée. À demain. »</div>
+    </div>
+    <div class="copy-ex">
+      <div class="copy-context">Réponse à un avis Google 5 étoiles</div>
+      <div class="copy-text">« Merci Sophie ! Votre BMW méritait ce traitement — on espère vous retrouver le mois prochain. Toujours un plaisir à Rangueil. »</div>
+    </div>
+    <div class="copy-ex">
+      <div class="copy-context">Bio Instagram</div>
+      <div class="copy-text">« Éclat Auto Toulouse · Nettoyage & détailing à domicile · Résultat showroom, produits pro · 📍 Toulouse &amp; 30 km · 📲 Réserver ↓ »</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 6. DOMAINES -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Étape 6</div>
+  <h2>Noms de domaine</h2>
+  <p class="desc">Options à vérifier en priorité sur votre registrar (OVH, Gandi, Namecheap…).</p>
+  <div class="domain-list">
+    <div class="domain-item"><span class="domain-name">eclat-auto.fr</span><span class="domain-badge avail">À vérifier — priorité 1</span></div>
+    <div class="domain-item"><span class="domain-name">eclatdetailing.fr</span><span class="domain-badge avail">À vérifier — priorité 2</span></div>
+    <div class="domain-item"><span class="domain-name">eclatauto.fr</span><span class="domain-badge check">À vérifier</span></div>
+    <div class="domain-item"><span class="domain-name">eclat-toulouse.fr</span><span class="domain-badge check">À vérifier</span></div>
+    <div class="domain-item"><span class="domain-name">lustro-detailing.fr</span><span class="domain-badge check">Alternative Lustro</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 7. ICÔNES FONCTIONNELLES -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Étape 7</div>
+  <h2>Icônes & pictogrammes</h2>
+  <p class="desc">Style : outline, stroke 1.8px, coin radius 2, couleur or sur fond sombre. Librairie recommandée : Lucide Icons.</p>
+
+  <div class="icon-row">
+    <div class="icon-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><circle cx="12" cy="12" r="10"/></svg>
+      <span>Lavage</span>
+    </div>
+    <div class="icon-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <span>Céramique</span>
+    </div>
+    <div class="icon-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2.5"/><line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2.5"/></svg>
+      <span>Satisfaction</span>
+    </div>
+    <div class="icon-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Toulouse</span>
+    </div>
+    <div class="icon-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.06 6.06l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>Contact</span>
+    </div>
+    <div class="icon-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Assurance</span>
+    </div>
+    <div class="icon-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Rapidité</span>
+    </div>
+    <div class="icon-box">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
+      <span>Inclus</span>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- FOOTER BOARD -->
+<div style="text-align:center;padding:40px 0 0">
+  <svg viewBox="0 0 280 70" xmlns="http://www.w3.org/2000/svg" width="200" style="margin-bottom:16px">
+    <defs><linearGradient id="gFinal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0d080"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs>
+    <g transform="translate(28,35)">
+      <circle r="14" fill="rgba(201,168,76,.08)"/>
+      <line x1="0" y1="-12" x2="0" y2="-19" stroke="url(#gFinal)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="0" y1="12" x2="0" y2="19" stroke="url(#gFinal)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="-12" y1="0" x2="-19" y2="0" stroke="url(#gFinal)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="12" y1="0" x2="19" y2="0" stroke="url(#gFinal)" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="8.5" y1="-8.5" x2="12" y2="-12" stroke="url(#gFinal)" stroke-width="1" stroke-linecap="round" opacity=".6"/>
+      <line x1="-8.5" y1="-8.5" x2="-12" y2="-12" stroke="url(#gFinal)" stroke-width="1" stroke-linecap="round" opacity=".6"/>
+      <line x1="8.5" y1="8.5" x2="12" y2="12" stroke="url(#gFinal)" stroke-width="1" stroke-linecap="round" opacity=".6"/>
+      <line x1="-8.5" y1="8.5" x2="-12" y2="12" stroke="url(#gFinal)" stroke-width="1" stroke-linecap="round" opacity=".6"/>
+      <path d="M0 -6 L4.5 0 L0 6 L-4.5 0 Z" fill="url(#gFinal)"/>
+    </g>
+    <text x="62" y="46" font-family="Bodoni Moda, Georgia, serif" font-size="34" font-weight="700" fill="url(#gFinal)" letter-spacing="3">ÉCLAT</text>
+    <text x="63" y="60" font-family="Jost, sans-serif" font-size="7.5" fill="rgba(201,168,76,0.5)" letter-spacing="4.5" font-weight="300">AUTO · TOULOUSE</text>
+  </svg>
+  <p style="color:var(--muted);font-size:.82rem">Brand Identity Board v1.0 · Généré pour votre service de nettoyage automobile à domicile</p>
+</div>
+
+</div>
+</body>
+</html>
