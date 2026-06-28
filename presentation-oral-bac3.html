@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oral Bac+3 – Yanis MATHLOUTHI – METRO 2025-2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --metro-blue: #003087;
+            --metro-blue-dark: #001d5e;
+            --metro-blue-light: #0047b3;
+            --metro-yellow: #FFE500;
+            --metro-yellow-dim: rgba(255,229,0,0.15);
+            --white: #ffffff;
+            --gray-light: #f4f6fa;
+            --gray-mid: #b0b8cc;
+            --gray-dark: #6b7a99;
+            --text-on-blue: rgba(255,255,255,0.85);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--metro-blue-dark);
+            color: var(--white);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: var(--metro-yellow);
+            transition: width 0.35s ease;
+            z-index: 1000;
+        }
+
+        .slide-deck {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        @media (min-width: 769px) {
+            .slide-deck {
+                max-width: calc(100vh * 16 / 9);
+                max-height: calc(100vw * 9 / 16);
+                margin: auto;
+                position: absolute;
+                inset: 0;
+            }
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 48px 60px 72px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease;
+            background: var(--metro-blue);
+            overflow: hidden;
+        }
+        .slide.active { opacity: 1; visibility: visible; }
+
+        /* ── NAV ── */
+        .nav-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(8px);
+            padding: 8px 20px;
+            border-radius: 100px;
+        }
+        .nav-btn {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-btn:hover { background: rgba(255,229,0,0.3); }
+        .slide-counter { color: rgba(255,255,255,0.75); font-size: 13px; min-width: 48px; text-align: center; }
+
+        /* ── TYPOGRAPHY ── */
+        .slide-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--metro-yellow);
+            margin-bottom: 10px;
+        }
+        .slide-title {
+            font-size: clamp(26px, 4vw, 52px);
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--white);
+        }
+        .slide-title .yellow { color: var(--metro-yellow); }
+        .slide-subtitle {
+            font-size: clamp(14px, 2vw, 20px);
+            color: var(--text-on-blue);
+            font-weight: 400;
+            margin-top: 8px;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            width: 56px; height: 4px;
+            background: var(--metro-yellow);
+            border-radius: 2px;
+            margin: 14px 0;
+        }
+
+        /* ── STAT BADGE ── */
+        .stat-grid {
+            display: grid;
+            gap: 14px;
+        }
+        .stat-badge {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .stat-icon {
+            width: 40px; height: 40px;
+            background: var(--metro-yellow-dim);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .stat-label { font-size: 11px; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 16px; font-weight: 700; color: var(--white); }
+
+        /* ── CARD ── */
+        .card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 18px 20px;
+        }
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--metro-yellow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .card-body { font-size: 13px; color: var(--text-on-blue); line-height: 1.6; }
+        .card-body li { margin-left: 14px; margin-bottom: 4px; }
+
+        /* ── TWO COLUMN ── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+            width: 100%;
+        }
+        .four-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+        }
+        .five-col {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* ── SLIDE 1 – COVER ── */
+        #s1 {
+            background: linear-gradient(135deg, #001d5e 0%, #003087 60%, #003da6 100%);
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .cover-logo {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 40px;
+        }
+        .logo-blue {
+            background: #003087;
+            border: 3px solid var(--metro-yellow);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--metro-yellow);
+            letter-spacing: 2px;
+        }
+        .cover-main-title {
+            font-size: clamp(32px, 5.5vw, 68px);
+            font-weight: 900;
+            line-height: 1.05;
+            color: var(--white);
+        }
+        .cover-main-title span { color: var(--metro-yellow); }
+        .cover-meta {
+            margin-top: 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .cover-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+        }
+        .cover-meta-row strong { color: white; font-weight: 600; }
+        .cover-dot {
+            width: 6px; height: 6px;
+            background: var(--metro-yellow);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .cover-accent-bar {
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 8px;
+            background: var(--metro-yellow);
+        }
+        .cover-year-badge {
+            position: absolute;
+            top: 48px; right: 48px;
+            background: var(--metro-yellow);
+            color: var(--metro-blue);
+            font-size: 18px;
+            font-weight: 900;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        /* ── SLIDE 2 – SOMMAIRE ── */
+        .sommaire-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+            width: 100%;
+        }
+        .sommaire-item {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px 26px;
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            transition: border-color 0.2s;
+        }
+        .sommaire-num {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--metro-yellow);
+            opacity: 0.35;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .sommaire-text h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 6px;
+        }
+        .sommaire-text p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.5;
+        }
+
+        /* ── SWOT ── */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            flex: 1;
+        }
+        .swot-cell {
+            border-radius: 14px;
+            padding: 16px 18px;
+        }
+        .swot-cell.forces { background: rgba(0,180,80,0.15); border: 1px solid rgba(0,180,80,0.3); }
+        .swot-cell.faiblesses { background: rgba(220,60,60,0.13); border: 1px solid rgba(220,60,60,0.3); }
+        .swot-cell.opportunites { background: rgba(255,229,0,0.1); border: 1px solid rgba(255,229,0,0.25); }
+        .swot-cell.menaces { background: rgba(255,120,0,0.12); border: 1px solid rgba(255,120,0,0.28); }
+        .swot-header {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .swot-cell.forces .swot-header { color: #4ade80; }
+        .swot-cell.faiblesses .swot-header { color: #f87171; }
+        .swot-cell.opportunites .swot-header { color: var(--metro-yellow); }
+        .swot-cell.menaces .swot-header { color: #fb923c; }
+        .swot-list { list-style: none; }
+        .swot-list li {
+            font-size: 12px;
+            color: rgba(255,255,255,0.85);
+            padding: 3px 0;
+            padding-left: 14px;
+            position: relative;
+            line-height: 1.4;
+        }
+        .swot-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            opacity: 0.6;
+        }
+
+        /* ── TABLE ── */
+        .comp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .comp-table th {
+            background: rgba(255,229,0,0.12);
+            color: var(--metro-yellow);
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,229,0,0.2);
+        }
+        .comp-table th:first-child { border-radius: 8px 0 0 0; }
+        .comp-table th:last-child { border-radius: 0 8px 0 0; }
+        .comp-table td {
+            padding: 9px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.85);
+            vertical-align: middle;
+        }
+        .comp-table tr:last-child td { border-bottom: none; }
+        .comp-table tr:hover td { background: rgba(255,255,255,0.04); }
+        .check { color: #4ade80; font-weight: 700; font-size: 14px; }
+        .cross { color: #f87171; font-weight: 700; font-size: 14px; }
+        .partial { color: #fb923c; font-size: 12px; }
+        .highlight-col { color: var(--metro-yellow); font-weight: 600; }
+
+        /* ── PROBLEMATIQUE ── */
+        #s9 {
+            background: linear-gradient(135deg, #001540 0%, #001d5e 50%, #003087 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .problem-quote {
+            font-size: clamp(20px, 3.2vw, 38px);
+            font-weight: 800;
+            line-height: 1.35;
+            color: white;
+            max-width: 900px;
+            position: relative;
+        }
+        .problem-quote::before {
+            content: '"';
+            font-size: 120px;
+            color: var(--metro-yellow);
+            opacity: 0.12;
+            position: absolute;
+            top: -40px; left: -20px;
+            line-height: 1;
+            font-family: Georgia, serif;
+        }
+        .problem-highlight { color: var(--metro-yellow); }
+        .kpi-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+        .kpi-pill {
+            background: rgba(255,229,0,0.12);
+            border: 1px solid rgba(255,229,0,0.3);
+            border-radius: 100px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--metro-yellow);
+        }
+
+        /* ── TIMELINE (semaine type) ── */
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            width: 100%;
+            position: relative;
+        }
+        .timeline-item {
+            flex: 1;
+            position: relative;
+            padding: 0 6px;
+        }
+        .timeline-dot {
+            width: 32px; height: 32px;
+            background: var(--metro-yellow);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--metro-blue);
+            margin: 0 auto 10px;
+            position: relative;
+            z-index: 2;
+        }
+        .timeline-line {
+            position: absolute;
+            top: 16px;
+            left: 50%; right: -50%;
+            height: 2px;
+            background: rgba(255,229,0,0.25);
+            z-index: 1;
+        }
+        .timeline-item:last-child .timeline-line { display: none; }
+        .timeline-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--metro-yellow);
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .timeline-desc {
+            font-size: 10.5px;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* ── STEP PROCESS ── */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+        .step-num {
+            width: 34px; height: 34px;
+            background: var(--metro-yellow);
+            color: var(--metro-blue);
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 900;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-title { font-size: 14px; font-weight: 700; color: white; }
+        .step-desc { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+
+        /* ── RESULT BADGE ── */
+        .result-big {
+            background: rgba(255,229,0,0.1);
+            border: 1px solid rgba(255,229,0,0.3);
+            border-radius: 14px;
+            padding: 16px 18px;
+            text-align: center;
+        }
+        .result-number {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--metro-yellow);
+            line-height: 1;
+        }
+        .result-label { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+        /* ── SKILL CARD ── */
+        .skill-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .skill-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .skill-name { font-size: 14px; font-weight: 700; color: white; margin-bottom: 8px; }
+        .skill-desc { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+
+        /* ── PILLAR CARD ── */
+        .pillar {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .pillar-icon {
+            font-size: 22px;
+            background: var(--metro-yellow-dim);
+            width: 42px; height: 42px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pillar-title { font-size: 13px; font-weight: 800; color: var(--metro-yellow); }
+        .pillar-body { font-size: 11.5px; color: rgba(255,255,255,0.7); line-height: 1.55; }
+
+        /* ── DISH CARD ── */
+        .dish-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 22px 20px;
+        }
+        .dish-tag {
+            display: inline-block;
+            background: var(--metro-yellow);
+            color: var(--metro-blue);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 100px;
+            margin-bottom: 10px;
+        }
+        .dish-title { font-size: 16px; font-weight: 800; color: white; margin-bottom: 8px; }
+        .dish-desc { font-size: 12px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+
+        /* ── CONTRACT ── */
+        .contract-example {
+            background: rgba(255,229,0,0.07);
+            border: 1px solid rgba(255,229,0,0.2);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-top: 10px;
+        }
+        .contract-example h4 {
+            font-size: 13px;
+            color: var(--metro-yellow);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .contract-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .contract-row:last-child { border-bottom: none; }
+        .contract-row .val { color: white; font-weight: 700; }
+
+        /* ── HEADER BAR ── */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .slide-header-left { display: flex; flex-direction: column; }
+        .slide-section {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,229,0,0.7);
+            font-weight: 600;
+        }
+        .slide-header-logo {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--metro-yellow);
+            letter-spacing: 1.5px;
+            border: 1.5px solid rgba(255,229,0,0.4);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        /* ── CONCLUSION FINALE ── */
+        #s16 {
+            background: linear-gradient(135deg, #001540 0%, #001d5e 50%, #003087 100%);
+        }
+        .conclusion-highlight {
+            background: var(--metro-yellow);
+            color: var(--metro-blue);
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .axe-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255,255,255,0.06);
+            border-left: 3px solid var(--metro-yellow);
+            border-radius: 0 10px 10px 0;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+        .axe-num {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--metro-yellow);
+            flex-shrink: 0;
+        }
+        .axe-text { font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.4; }
+
+        /* ── CHART CONTAINER ── */
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+            height: clamp(120px, 25vh, 200px);
+        }
+
+        /* ── SECTION LABEL TOP ── */
+        .top-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .top-label-bar {
+            width: 4px; height: 24px;
+            background: var(--metro-yellow);
+            border-radius: 2px;
+        }
+        .top-label-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--metro-yellow);
+        }
+
+        @media print {
+            .nav-controls, .progress-bar { display: none; }
+            .slide { position: relative; opacity: 1; visibility: visible; page-break-after: always; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="slide-deck">
+
+<!-- ============================== SLIDE 1 – COVER ============================== -->
+<div class="slide active" id="s1">
+    <div class="cover-accent-bar"></div>
+    <div class="cover-year-badge">2025 – 2026</div>
+
+    <div class="cover-logo">
+        <div class="logo-blue">M METRO</div>
+    </div>
+
+    <div class="slide-label" style="font-size:12px; letter-spacing:4px;">CFA METRO &nbsp;·&nbsp; TALIS BUSINESS SCHOOL</div>
+
+    <div class="cover-main-title" style="margin-top:12px;">
+        RAPPORT<br>D'ACTIVITÉ<br><span>2025–2026</span>
+    </div>
+
+    <div class="divider" style="margin-top:20px;"></div>
+
+    <div style="font-size:clamp(14px,2.2vw,22px); font-weight:600; color:rgba(255,255,255,0.9); margin-top:4px;">
+        Bachelor Chargé d'Affaires Commerciales (CAC)
+    </div>
+
+    <div class="cover-meta">
+        <div class="cover-meta-row">
+            <div class="cover-dot"></div>
+            <span>Étudiant : <strong>Yanis MATHLOUTHI</strong></span>
+        </div>
+        <div class="cover-meta-row">
+            <div class="cover-dot"></div>
+            <span>Entreprise : <strong>METRO Toulouse &amp; Portet-sur-Garonne</strong></span>
+        </div>
+        <div class="cover-meta-row">
+            <div class="cover-dot"></div>
+            <span>Tuteur : <strong>Kévin Ithurria</strong> &nbsp;·&nbsp; Compte Clé Territorial</span>
+        </div>
+        <div class="cover-meta-row">
+            <div class="cover-dot"></div>
+            <span>Période : <strong>01/09/2025 – 31/08/2026</strong></span>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 2 – SOMMAIRE ============================== -->
+<div class="slide" id="s2">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Plan de présentation</div>
+            <div class="slide-title" style="font-size:clamp(24px,3.5vw,42px);">Sommaire</div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="sommaire-grid">
+        <div class="sommaire-item">
+            <div class="sommaire-num">01</div>
+            <div class="sommaire-text">
+                <h3>Présentation de l'entreprise & du poste</h3>
+                <p>METRO AG · METRO France · La Halle de Portet-sur-Garonne · Mon rôle et mes missions</p>
+            </div>
+        </div>
+        <div class="sommaire-item">
+            <div class="sommaire-num">02</div>
+            <div class="sommaire-text">
+                <h3>Analyse de marché & environnement concurrentiel</h3>
+                <p>Veille concurrentielle · Concurrents · Analyse SWOT · Forces de Porter · Benchmark</p>
+            </div>
+        </div>
+        <div class="sommaire-item">
+            <div class="sommaire-num">03</div>
+            <div class="sommaire-text">
+                <h3>Problématique</h3>
+                <p>Comment une stratégie d'omnicanalité peut-elle jouer un rôle majeur dans la fidélisation client face à un contexte inflationniste ?</p>
+            </div>
+        </div>
+        <div class="sommaire-item">
+            <div class="sommaire-num">04</div>
+            <div class="sommaire-text">
+                <h3>Développement & réponse à la problématique</h3>
+                <p>Offre omnicanale METRO · Solutions DISH · Contrats · Missions · Résultats · Compétences · Conclusion</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 3 – METRO AG ============================== -->
+<div class="slide" id="s3">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie I – Présentation de l'entreprise</div>
+            <div class="slide-title">METRO AG — <span class="yellow">Groupe International</span></div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1.1fr 1fr; gap: 18px; width:100%; flex:1;">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <div class="stat-badge">
+                <div class="stat-icon">📅</div>
+                <div>
+                    <div class="stat-label">Fondée en</div>
+                    <div class="stat-value">1964 — Otto Beisheim · Siège : Düsseldorf</div>
+                </div>
+            </div>
+            <div class="stat-badge">
+                <div class="stat-icon">👤</div>
+                <div>
+                    <div class="stat-label">PDG actuel</div>
+                    <div class="stat-value">Steffen Greubel (depuis mai 2021)</div>
+                </div>
+            </div>
+            <div class="stat-badge">
+                <div class="stat-icon">🌍</div>
+                <div>
+                    <div class="stat-label">Présence mondiale</div>
+                    <div class="stat-value">33 pays · modèle Cash &amp; Carry</div>
+                </div>
+            </div>
+            <div class="stat-badge">
+                <div class="stat-icon">💶</div>
+                <div>
+                    <div class="stat-label">Chiffre d'affaires 2024</div>
+                    <div class="stat-value">31,03 Milliards d'euros</div>
+                </div>
+            </div>
+            <div class="stat-badge">
+                <div class="stat-icon">🛒</div>
+                <div>
+                    <div class="stat-label">Stratégie</div>
+                    <div class="stat-value">Omnicanale : physique + digital + livraison</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; align-content:center;">
+            <div class="card" style="text-align:center;">
+                <div style="font-size:38px; font-weight:900; color:var(--metro-yellow);">624</div>
+                <div style="font-size:12px; color:var(--gray-mid); margin-top:4px;">Magasins physiques</div>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div style="font-size:38px; font-weight:900; color:var(--metro-yellow);">523</div>
+                <div style="font-size:12px; color:var(--gray-mid); margin-top:4px;">Sites de livraison</div>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div style="font-size:38px; font-weight:900; color:var(--metro-yellow);">94</div>
+                <div style="font-size:12px; color:var(--gray-mid); margin-top:4px;">Dépôts de livraison</div>
+            </div>
+            <div class="card" style="text-align:center;">
+                <div style="font-size:38px; font-weight:900; color:var(--metro-yellow);">6</div>
+                <div style="font-size:12px; color:var(--gray-mid); margin-top:4px;">Pays METRO MarketPlace</div>
+            </div>
+            <div class="card" style="text-align:center; grid-column:span 2;">
+                <div style="font-size:13px; font-weight:700; color:white; margin-bottom:4px;">Premier magasin</div>
+                <div style="font-size:12px; color:var(--gray-mid);">Mülheim an der Ruhr, Allemagne<br>Concept innovant : achat en gros, libre-service, clientèle B2B</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 4 – METRO FRANCE & MA HALLE ============================== -->
+<div class="slide" id="s4">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie I – Présentation de l'entreprise</div>
+            <div class="slide-title">METRO France & <span class="yellow">Ma Halle</span></div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="two-col" style="flex:1; align-items:start;">
+        <!-- LEFT -->
+        <div class="card" style="padding:22px; height:100%;">
+            <div class="top-label">
+                <div class="top-label-bar"></div>
+                <div class="top-label-text">METRO France</div>
+            </div>
+            <div style="font-size:11px; color:var(--metro-yellow); margin-bottom:14px; opacity:0.8;">CEO : Cynthia Merope</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div class="stat-badge" style="padding:10px 14px;">
+                    <div class="stat-icon" style="font-size:14px; width:32px; height:32px; border-radius:8px;">🏆</div>
+                    <div>
+                        <div class="stat-label">Positionnement</div>
+                        <div class="stat-value" style="font-size:13px;">Leader commerce de gros professionnels</div>
+                    </div>
+                </div>
+                <div class="stat-badge" style="padding:10px 14px;">
+                    <div class="stat-icon" style="font-size:14px; width:32px; height:32px; border-radius:8px;">🍽️</div>
+                    <div>
+                        <div class="stat-label">Secteur cible</div>
+                        <div class="stat-value" style="font-size:13px;">HoReCa — Hôtels, Restaurants, Cafés</div>
+                    </div>
+                </div>
+                <div class="stat-badge" style="padding:10px 14px;">
+                    <div class="stat-icon" style="font-size:14px; width:32px; height:32px; border-radius:8px;">📊</div>
+                    <div>
+                        <div class="stat-label">Parts de marché</div>
+                        <div class="stat-value" style="font-size:13px;">~40% · CA 5,18 Mds€ (16,7% CA Groupe)</div>
+                    </div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px;">
+                    <div class="card" style="text-align:center; padding:12px;">
+                        <div style="font-size:26px; font-weight:900; color:var(--metro-yellow);">99</div>
+                        <div style="font-size:11px; color:var(--gray-mid);">Halles en France</div>
+                    </div>
+                    <div class="card" style="text-align:center; padding:12px;">
+                        <div style="font-size:26px; font-weight:900; color:var(--metro-yellow);">9 000</div>
+                        <div style="font-size:11px; color:var(--gray-mid);">Collaborateurs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="card" style="padding:22px; height:100%; border-color:rgba(255,229,0,0.3); background:rgba(255,229,0,0.05);">
+            <div class="top-label">
+                <div class="top-label-bar"></div>
+                <div class="top-label-text">Halle de Portet-sur-Garonne</div>
+            </div>
+            <div style="font-size:11px; color:var(--metro-yellow); margin-bottom:14px; opacity:0.8;">Dir. Vincent Ranou · Type ECO3 + Hub livraison · 64 collaborateurs</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px;">
+                <div style="background:rgba(255,229,0,0.1); border-radius:10px; text-align:center; padding:12px 6px;">
+                    <div style="font-size:16px; font-weight:900; color:var(--metro-yellow);">53,9 M€</div>
+                    <div style="font-size:10px; color:var(--gray-mid); margin-top:3px;">CA annuel</div>
+                </div>
+                <div style="background:rgba(255,229,0,0.1); border-radius:10px; text-align:center; padding:12px 6px;">
+                    <div style="font-size:16px; font-weight:900; color:var(--metro-yellow);">7 884</div>
+                    <div style="font-size:10px; color:var(--gray-mid); margin-top:3px;">Clients pro</div>
+                </div>
+                <div style="background:rgba(255,229,0,0.1); border-radius:10px; text-align:center; padding:12px 6px;">
+                    <div style="font-size:16px; font-weight:900; color:var(--metro-yellow);">360</div>
+                    <div style="font-size:10px; color:var(--gray-mid); margin-top:3px;">Visites/jour</div>
+                </div>
+            </div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.75); line-height:1.6;">
+                <strong style="color:var(--metro-yellow);">Univers :</strong> Frais Fruits&amp;Légumes · Boucherie · Marée · Crèmerie · Épicerie Salée &amp; Sucrée · DPH · Matériel CHR<br><br>
+                <strong style="color:var(--metro-yellow);">Pôle Commerce :</strong> CA OutStore <strong style="color:white;">29,3 M€</strong> · Marge additionnelle <strong style="color:white;">7,2 M€</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 5 – MON RÔLE ============================== -->
+<div class="slide" id="s5">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie I – Mon poste</div>
+            <div class="slide-title">Chargé de Clientèle <span class="yellow">Junior</span></div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:18px; flex:1; align-items:start;">
+        <div>
+            <div class="card" style="margin-bottom:12px;">
+                <div class="card-title">Mon rôle au sein du Pôle Commerce</div>
+                <div class="card-body">
+                    Équipe de <strong style="color:white;">7 commerciaux</strong> (5 Chargés de Clientèle + 2 KAT) + 1 Leader<br><br>
+                    <ul>
+                        <li>Démarchage et qualification des <strong style="color:white;">nouveaux clients</strong> encartés</li>
+                        <li>Détermination du potentiel d'achat et des besoins</li>
+                        <li>Orientation vers le bon contact commercial (halle ou FDV itinérante)</li>
+                        <li>Back-up sur postes vacants · Gestion client La Patagonia</li>
+                        <li>Saisie des comptes rendus dans le CRM : <strong style="color:var(--metro-yellow);">SAM</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="card-title" style="font-size:11px; color:var(--metro-yellow); font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;">Semaine type</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">L</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-label">Lundi</div>
+                    <div class="timeline-desc">Réunion équipe<br>Point chiffres<br>Préparation semaine</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">M</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-label">Mardi</div>
+                    <div class="timeline-desc">Visites terrain<br>Repas client<br>Phoning + SAM</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">M</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-label">Mercredi</div>
+                    <div class="timeline-desc">Visites terrain<br>Repas client<br>Phoning + SAM</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">J</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-label">Jeudi</div>
+                    <div class="timeline-desc">Visites terrain<br>Repas client<br>Phoning + SAM</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">V</div>
+                    <div class="timeline-line"></div>
+                    <div class="timeline-label">Vendredi</div>
+                    <div class="timeline-desc">Terrain + bilan<br>hebdomadaire<br>Redistribution leads</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 6 – ANALYSE DE MARCHÉ ============================== -->
+<div class="slide" id="s6">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie II – Environnement concurrentiel</div>
+            <div class="slide-title">Analyse de <span class="yellow">marché</span></div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:2fr 3fr; gap:18px; flex:1; align-items:start;">
+        <div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div class="card" style="text-align:center; padding:16px;">
+                    <div style="font-size:28px; font-weight:900; color:var(--metro-yellow);">123 Mds€</div>
+                    <div style="font-size:11px; color:var(--gray-mid); margin-top:4px;">Consommation hors domicile France 2024</div>
+                </div>
+                <div class="card" style="text-align:center; padding:16px;">
+                    <div style="font-size:28px; font-weight:900; color:var(--metro-yellow);">23,4 Mds€</div>
+                    <div style="font-size:11px; color:var(--gray-mid); margin-top:4px;">Marché HoReCa — METRO : 16% de parts</div>
+                </div>
+                <div class="card" style="text-align:center; padding:16px;">
+                    <div style="font-size:28px; font-weight:900; color:#f87171;">+16%</div>
+                    <div style="font-size:11px; color:var(--gray-mid); margin-top:4px;">Inflation matières premières 2023</div>
+                </div>
+                <div class="card" style="text-align:center; padding:16px;">
+                    <div style="font-size:28px; font-weight:900; color:#fb923c;">+7%</div>
+                    <div style="font-size:11px; color:var(--gray-mid); margin-top:4px;">Défaillances entreprises 2023–2024</div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="card-title" style="margin-bottom:10px;">Principaux concurrents</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <div class="stat-badge">
+                    <div class="stat-icon" style="background:rgba(255,100,100,0.15);">🏢</div>
+                    <div>
+                        <div class="stat-value" style="font-size:14px;">Pomona</div>
+                        <div class="stat-label">Co-leader · CA 5,3 Mds€ · TerreAzur + PassionFroid + Episaveurs · Frais &amp; surgelés</div>
+                    </div>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-icon" style="background:rgba(100,150,255,0.15);">🚚</div>
+                    <div>
+                        <div class="stat-value" style="font-size:14px;">Transgourmet</div>
+                        <div class="stat-label">Distribution livrée &gt;80% du marché · restauration commerciale &amp; collective</div>
+                    </div>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-icon" style="background:rgba(0,200,100,0.15);">🏪</div>
+                    <div>
+                        <div class="stat-value" style="font-size:14px;">Promocash (Carrefour)</div>
+                        <div class="stat-label">Cash &amp; Carry concurrent · 150 points de vente (+15% livraison 2025) · prix offensif</div>
+                    </div>
+                </div>
+                <div class="stat-badge">
+                    <div class="stat-icon" style="background:rgba(255,165,0,0.15);">💻</div>
+                    <div>
+                        <div class="stat-value" style="font-size:14px;">Sysco France</div>
+                        <div class="stat-label">Investissements digitaux croissants · distribution livrée nationale</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 7 – SWOT ============================== -->
+<div class="slide" id="s7">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie II – Analyse stratégique</div>
+            <div class="slide-title">Analyse <span class="yellow">SWOT</span> — METRO</div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="swot-grid">
+        <div class="swot-cell forces">
+            <div class="swot-header">Forces</div>
+            <ul class="swot-list">
+                <li>+50 000 références — généraliste complet</li>
+                <li>50 ans d'expertise B2B agroalimentaire</li>
+                <li>Livraison A/B avant 16h — commande jusqu'à 16h</li>
+                <li>99 halles à moins de 30 min de chaque client</li>
+                <li>Gamme hygiène + matériel CHR professionnel</li>
+                <li>Marques propres (MDD) multi-gammes</li>
+            </ul>
+        </div>
+        <div class="swot-cell faiblesses">
+            <div class="swot-header">Faiblesses</div>
+            <ul class="swot-list">
+                <li>Forte dépendance au secteur CHR</li>
+                <li>Coûts logistiques et énergétiques élevés</li>
+                <li>Pression tarifaire en contexte inflationniste</li>
+                <li>Perception moins spécialisée que Transgourmet/Pomona</li>
+                <li>Fiabilité logistique critiquée (délais J+1 à 92%)</li>
+            </ul>
+        </div>
+        <div class="swot-cell opportunites">
+            <div class="swot-header">Opportunités</div>
+            <ul class="swot-list">
+                <li>METRO MarketPlace : +400 000 réf. non-alimentaires</li>
+                <li>Montée du végétal : +52% offre veggie (2021-2023)</li>
+                <li>Croissance snacking, livraison, restauration rapide</li>
+                <li>78% TPE-PME ouvertes au numérique (France Num)</li>
+                <li>Produits origine France : 37,6% des offres promo 2023</li>
+            </ul>
+        </div>
+        <div class="swot-cell menaces">
+            <div class="swot-header">Menaces</div>
+            <ul class="swot-list">
+                <li>Concurrence intense : Sysco, Pomona, Transgourmet…</li>
+                <li>Basculement du marché vers la distribution livrée</li>
+                <li>Instabilité des prix matières premières &amp; énergie</li>
+                <li>Plateformes B2B digitales réduisent les barrières à l'entrée</li>
+                <li>Défaillances en hausse dans le secteur CHR (+7%)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 8 – BENCHMARK ============================== -->
+<div class="slide" id="s8">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie II – Benchmark concurrentiel</div>
+            <div class="slide-title">Comparaison <span class="yellow">panier 100 €</span> & Omnicanalité</div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="two-col" style="flex:1; align-items:start;">
+        <div>
+            <div class="card-title" style="margin-bottom:10px;">Panier test restauration (100 € HT chez METRO)</div>
+            <div class="chart-wrap" style="height:180px;">
+                <canvas id="benchmarkChart"></canvas>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;">
+                <span style="background:rgba(255,229,0,0.15); border:1px solid rgba(255,229,0,0.3); border-radius:6px; padding:4px 10px; font-size:11px; color:var(--metro-yellow);">METRO : 100,00 €</span>
+                <span style="background:rgba(100,220,100,0.1); border:1px solid rgba(100,220,100,0.3); border-radius:6px; padding:4px 10px; font-size:11px; color:#4ade80;">Promocash : 97,99 € <span style="opacity:0.7;">(-2%)</span></span>
+                <span style="background:rgba(255,255,255,0.06); border-radius:6px; padding:4px 10px; font-size:11px; color:rgba(255,255,255,0.7);">Pomona : 100,95 € (+1%)</span>
+                <span style="background:rgba(255,255,255,0.06); border-radius:6px; padding:4px 10px; font-size:11px; color:rgba(255,255,255,0.7);">Transgourmet : 102,00 € (+2%)</span>
+                <span style="background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.2); border-radius:6px; padding:4px 10px; font-size:11px; color:#f87171;">Sysco : 103,00 € (+3%)</span>
+            </div>
+        </div>
+
+        <div>
+            <div class="card-title" style="margin-bottom:10px;">Comparatif omnicanalité</div>
+            <table class="comp-table">
+                <thead>
+                    <tr>
+                        <th>Critères</th>
+                        <th>METRO</th>
+                        <th>Promocash</th>
+                        <th>Transgourmet</th>
+                        <th>Sysco</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Halles physiques</td><td class="check highlight-col">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+                    <tr><td>Livraison</td><td class="check highlight-col">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+                    <tr><td>Marketplace</td><td class="check highlight-col">✓</td><td class="cross">✗</td><td class="partial">Limité</td><td class="cross">✗</td></tr>
+                    <tr><td>Solutions digitales</td><td class="highlight-col">Très dév.</td><td style="font-size:11px;color:var(--gray-mid)">Modérées</td><td style="font-size:11px;color:var(--gray-mid)">Dév.</td><td style="font-size:11px;color:var(--gray-mid)">Modérées</td></tr>
+                    <tr><td>Click &amp; Collect</td><td class="check highlight-col">✓</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td></tr>
+                    <tr><td>Accom. commercial</td><td class="highlight-col">Fort</td><td style="font-size:11px;color:var(--gray-mid)">Moyen</td><td style="font-size:11px;color:var(--gray-mid)">Fort</td><td style="font-size:11px;color:var(--gray-mid)">Fort</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 9 – PROBLÉMATIQUE ============================== -->
+<div class="slide" id="s9">
+    <div style="text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; gap:28px;">
+        <div style="font-size:11px; letter-spacing:4px; font-weight:700; color:rgba(255,229,0,0.7); text-transform:uppercase;">Partie III — Problématique</div>
+
+        <div class="problem-quote">
+            "Comment une <span class="problem-highlight">stratégie d'omnicanalité</span> peut-elle jouer un rôle majeur dans la <span class="problem-highlight">fidélisation client</span> face à un contexte <span class="problem-highlight">inflationniste</span> ?"
+        </div>
+
+        <div style="width:60px; height:3px; background:var(--metro-yellow); border-radius:2px; margin:0 auto;"></div>
+
+        <div class="kpi-row">
+            <div class="kpi-pill">Inflation alimentaire +16% (2019-2023)</div>
+            <div class="kpi-pill">Hausse des charges restaurateurs</div>
+            <div class="kpi-pill">Clients plus volatiles — comparaison de prix accrue</div>
+            <div class="kpi-pill">Client omnicanal = 7× plus rentable (Plan SCORE)</div>
+        </div>
+
+        <div style="font-size:14px; color:rgba(255,255,255,0.6); max-width:700px; line-height:1.7;">
+            À l'issue d'un diagnostic interne et externe, il apparaît que la tendance inflationniste fragilise la fidélité des clients. La mise en place d'une stratégie omnicanale vise à renforcer la relation client, sécuriser le CA et différencier l'entreprise par la qualité de service.
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 10 – OFFRE OMNICANALE ============================== -->
+<div class="slide" id="s10">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie IV – Développement</div>
+            <div class="slide-title">L'offre <span class="yellow">omnicanale</span> METRO</div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="five-col" style="flex:1; align-items:start;">
+        <div class="pillar">
+            <div class="pillar-icon">🚚</div>
+            <div class="pillar-title">Livraison</div>
+            <div class="pillar-body">
+                Bassin Garonne A/B avant 16h<br>
+                Min. 400 € commande<br>
+                1 700 €/mois min.<br>
+                Carte Réflexe + crédit bail<br>
+                (Locam / Sircam)
+            </div>
+        </div>
+        <div class="pillar">
+            <div class="pillar-icon">💻</div>
+            <div class="pillar-title">DISH</div>
+            <div class="pillar-body">
+                Solutions digitales<br>
+                POS caisse cloud<br>
+                Pay : sans contact &amp; QR<br>
+                Pro Order : commande en ligne<br>
+                Pro Reservation : réserv. 24/7
+            </div>
+        </div>
+        <div class="pillar">
+            <div class="pillar-icon">🛍️</div>
+            <div class="pillar-title">MarketPlace</div>
+            <div class="pillar-body">
+                +400 000 réf. non-alim.<br>
+                Accessible 24/7<br>
+                Promos flash relayables<br>
+                Codes promo commerciaux<br>
+                Comparatif équipements
+            </div>
+        </div>
+        <div class="pillar">
+            <div class="pillar-icon">📋</div>
+            <div class="pillar-title">MPM / RFA</div>
+            <div class="pillar-body">
+                Remise de Fin d'Année<br>
+                Paliers : 3% à 3,5%<br>
+                Versement en Points M<br>
+                Découverte 4 mois<br>
+                Saisonnière 6 mois<br>
+                Classique 12 mois
+            </div>
+        </div>
+        <div class="pillar">
+            <div class="pillar-icon">🤝</div>
+            <div class="pillar-title">PMM / Mercuriale</div>
+            <div class="pillar-body">
+                Analyse 20/80 produits<br>
+                Tarification via PRECO<br>
+                Prix bloqués 3 mois<br>
+                Revues trimestrielles<br>
+                App My COMPANION<br>
+                Pricing individualisé
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top:12px; text-align:center; font-size:12px; color:rgba(255,229,0,0.8); font-weight:600;">
+        Plan SCORE 2030 : +2 Mds€ · Objectif livraison ×4 · Client omnicanal = 7× plus rentable
+    </div>
+</div>
+
+<!-- ============================== SLIDE 11 – SOLUTIONS DISH ============================== -->
+<div class="slide" id="s11">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie IV – Solutions digitales</div>
+            <div class="slide-title">Solutions <span class="yellow">DISH</span> — Le digital au service du CHR</div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="four-col" style="flex:1; align-items:start;">
+        <div class="dish-card">
+            <div class="dish-tag">DISH POS</div>
+            <div class="dish-title">Caisse connectée cloud</div>
+            <div class="dish-desc">
+                Système tout-en-un basé sur le cloud pour gérer commandes et paiements de façon rapide et sécurisée. Optimise l'ensemble des opérations et améliore l'expérience client.
+                <br><br>
+                <span style="color:var(--metro-yellow); font-weight:600;">Avantage :</span> CA plus élevé, gestion centralisée
+            </div>
+        </div>
+        <div class="dish-card">
+            <div class="dish-tag">DISH PAY</div>
+            <div class="dish-title">Solution de paiement complète</div>
+            <div class="dish-desc">
+                Transactions rapides et sécurisées : paiement sans contact <em>(Tap to Pay)</em> et QR code. Tableau de bord unifié, fournisseur unique.
+                <br><br>
+                <span style="color:var(--metro-yellow); font-weight:600;">Avantage :</span> Moins d'erreurs, tous moyens de paiement
+            </div>
+        </div>
+        <div class="dish-card">
+            <div class="dish-tag">PRO ORDER</div>
+            <div class="dish-title">Commandes en ligne</div>
+            <div class="dish-desc">
+                Les clients commandent directement sur votre site internet. Gestion autonome des menus. <strong>Sans commission.</strong> Boîtier de commande + site e-commerce + fiche Google My Business.
+                <br><br>
+                <span style="color:var(--metro-yellow); font-weight:600;">Avantage :</span> Indépendance des plateformes de livraison
+            </div>
+        </div>
+        <div class="dish-card">
+            <div class="dish-tag">PRO RESERVATION</div>
+            <div class="dish-title">Réservations 24/7</div>
+            <div class="dish-desc">
+                Réservations via site, Google, Instagram et Facebook. <strong>Sans commission.</strong> Rappels SMS pour réduire le no-show. Site internet + fiche Google My Business inclus.
+                <br><br>
+                <span style="color:var(--metro-yellow); font-weight:600;">Avantage :</span> Taux d'occupation optimisé
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top:12px; background:rgba(255,229,0,0.08); border:1px solid rgba(255,229,0,0.2); border-radius:10px; padding:10px 16px; font-size:12px; color:rgba(255,255,255,0.8); text-align:center;">
+        DISH = levier de fidélisation : METRO devient partenaire de la gestion complète de l'établissement client &nbsp;·&nbsp; Opération "500 POS" : 200 leads ciblés, 50 contrats signés
+    </div>
+</div>
+
+<!-- ============================== SLIDE 12 – CONTRATS ============================== -->
+<div class="slide" id="s12">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie IV – Fidélisation</div>
+            <div class="slide-title">Les contrats de <span class="yellow">fidélisation</span></div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="two-col" style="flex:1; align-items:start;">
+        <!-- LEFT – MPM/RFA -->
+        <div class="card" style="padding:20px; height:100%;">
+            <div class="top-label">
+                <div class="top-label-bar"></div>
+                <div class="top-label-text">MPM / RFA — Remise de Fin d'Année</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+                <div style="display:flex; gap:8px;">
+                    <div style="flex:1; background:rgba(255,229,0,0.08); border-radius:8px; padding:10px; text-align:center;">
+                        <div style="font-size:18px; font-weight:900; color:var(--metro-yellow);">4 mois</div>
+                        <div style="font-size:10px; color:var(--gray-mid);">RFA Découverte<br>(nouveaux clients)</div>
+                    </div>
+                    <div style="flex:1; background:rgba(255,229,0,0.08); border-radius:8px; padding:10px; text-align:center;">
+                        <div style="font-size:18px; font-weight:900; color:var(--metro-yellow);">6 mois</div>
+                        <div style="font-size:10px; color:var(--gray-mid);">RFA Saisonnière<br>(guinguette, ski…)</div>
+                    </div>
+                    <div style="flex:1; background:rgba(255,229,0,0.08); border-radius:8px; padding:10px; text-align:center;">
+                        <div style="font-size:18px; font-weight:900; color:var(--metro-yellow);">12 mois</div>
+                        <div style="font-size:10px; color:var(--gray-mid);">RFA Classique<br>(client existant)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="contract-example">
+                <h4>Exemple client : LA SANDIA (Restaurant mexicain)</h4>
+                <div class="contract-row">
+                    <span>Potentiel estimé</span><span class="val">140 000 €</span>
+                </div>
+                <div class="contract-row">
+                    <span>CA N-1 chez METRO</span><span class="val">117 000 €</span>
+                </div>
+                <div class="contract-row">
+                    <span>Palier 1 — 117 000 € → 3%</span><span class="val" style="color:#4ade80;">= 3 510 € en Points M</span>
+                </div>
+                <div class="contract-row">
+                    <span>Palier 2 — 137 000 € → 3,5%</span><span class="val" style="color:#4ade80;">= 4 795 €+</span>
+                </div>
+                <div style="font-size:11px; color:rgba(255,255,255,0.5); margin-top:6px;">Contrat gagnant-gagnant · Points M utilisables pour régler les achats</div>
+            </div>
+        </div>
+
+        <!-- RIGHT – PMM/MERCURIALE -->
+        <div class="card" style="padding:20px; height:100%; border-color:rgba(255,229,0,0.25); background:rgba(255,229,0,0.04);">
+            <div class="top-label">
+                <div class="top-label-bar"></div>
+                <div class="top-label-text">PMM / Mercuriale — Tarification personnalisée</div>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div>
+                        <div class="step-title">Analyse 20/80</div>
+                        <div class="step-desc">Identification des 20 produits réalisant 80% du CA client</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div>
+                        <div class="step-title">Tarification via PRECO</div>
+                        <div class="step-desc">Outil interne — prix compétitifs sur livrés vs concurrents</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div>
+                        <div class="step-title">Prix bloqués 3 mois</div>
+                        <div class="step-desc">Remises indexées sur cours variables (marée, boucherie, beurre, huile…)</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div>
+                        <div class="step-title">Revues trimestrielles</div>
+                        <div class="step-desc">Bilan engagements + réajustement prix + saturation panier</div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:10px; font-size:12px; color:rgba(255,255,255,0.7); background:rgba(255,255,255,0.05); border-radius:8px; padding:10px;">
+                Tarifs personnalisés visibles dans l'app <strong style="color:white;">METRO My COMPANION</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 13 – MA MISSION ============================== -->
+<div class="slide" id="s13">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie IV – Mes missions</div>
+            <div class="slide-title">Mission : <span class="yellow">Accompagnement</span> des nouveaux clients</div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:18px; flex:1; align-items:start;">
+        <div>
+            <div class="card-title" style="margin-bottom:10px;">Processus en 5 étapes</div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div>
+                        <div class="step-title">Préparation</div>
+                        <div class="step-desc">Consultation du CRM SAM — profil, potentiel, historique d'achat</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div>
+                        <div class="step-title">Prise de contact</div>
+                        <div class="step-desc">Téléphonique ou visite terrain — adaptation à la disponibilité</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div>
+                        <div class="step-title">Découverte du besoin</div>
+                        <div class="step-desc">Écoute active, questions ciblées, identification des priorités et contraintes</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div>
+                        <div class="step-title">Qualification du lead</div>
+                        <div class="step-desc">Reformulation, structuration, transmission au bon interlocuteur (CC / KAT / CVE)</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <div>
+                        <div class="step-title">Suivi activation</div>
+                        <div class="step-desc">Mesure de l'impact via SAM — achats effectués, leads convertis</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="card">
+                <div class="card-title">Objectifs de la mission</div>
+                <div class="card-body">
+                    <li>Faciliter l'entrée en relation client–METRO</li>
+                    <li>Détecter et qualifier le besoin précisément</li>
+                    <li>Contribuer à l'activation du compte (1er achat &lt;30j)</li>
+                    <li>Identifier les leviers de développement omnicanal</li>
+                </div>
+            </div>
+            <div class="card" style="border-color:rgba(255,229,0,0.3); background:rgba(255,229,0,0.06);">
+                <div class="card-title">Mission complémentaire — Secteur vacant</div>
+                <div class="card-body">
+                    Gestion d'un portefeuille clients existants lors d'un back-up :<br><br>
+                    <strong style="color:white;">Client La Patagonia :</strong> marge livrée insuffisante → travail intensif de saturation du panier<br>
+                    <strong style="color:var(--metro-yellow); font-size:15px;">Résultat : +35% sur le panier client</strong>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Vente solution DISH</div>
+                <div class="card-body">J'ai également vendu une <strong style="color:white;">caisse digitale DISH POS</strong> lors de cette mission de back-up sur secteur vacant.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 14 – RÉSULTATS & DIFFICULTÉS ============================== -->
+<div class="slide" id="s14">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie IV – Bilan de mission</div>
+            <div class="slide-title">Résultats & <span class="yellow">Difficultés rencontrées</span></div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="two-col" style="flex:1; align-items:start;">
+        <!-- RÉSULTATS -->
+        <div>
+            <div class="card-title" style="margin-bottom:12px;">Résultats obtenus</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+                <div class="result-big">
+                    <div class="result-number">~20</div>
+                    <div class="result-label">RDV / semaine</div>
+                </div>
+                <div class="result-big">
+                    <div class="result-number">5</div>
+                    <div class="result-label">Clients transformés / sem.</div>
+                </div>
+                <div class="result-big" style="grid-column:span 2; background:rgba(255,229,0,0.15); border-color:rgba(255,229,0,0.5);">
+                    <div class="result-number" style="font-size:48px;">25%</div>
+                    <div class="result-label">Taux de transformation moyen</div>
+                </div>
+            </div>
+            <div class="card" style="border-color:rgba(255,229,0,0.2);">
+                <div class="card-title">Faits marquants</div>
+                <div class="card-body">
+                    <li>Vente d'une <strong style="color:white;">caisse DISH POS</strong> lors du back-up</li>
+                    <li>Client La Patagonia : <strong style="color:var(--metro-yellow);">+35% de panier</strong> grâce à la saturation</li>
+                    <li>Meilleure orientation des clients vers les bons interlocuteurs</li>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIFFICULTÉS -->
+        <div>
+            <div class="card-title" style="margin-bottom:12px;">Difficultés & Solutions</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div class="card">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <span style="background:rgba(255,100,100,0.2); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:12px;">⚡</span>
+                        <div class="card-title" style="margin:0;">Déplacements dispersés</div>
+                    </div>
+                    <div class="card-body">
+                        <strong style="color:rgba(255,100,100,0.9);">Problème :</strong> Beaucoup de route entre deux RDV<br>
+                        <strong style="color:#4ade80;">Solution :</strong> Mapping et tri par zone commerciale (aide Kévin Ithurria)
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <span style="background:rgba(255,100,100,0.2); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:12px;">⚡</span>
+                        <div class="card-title" style="margin:0;">Priorisation des tâches</div>
+                    </div>
+                    <div class="card-body">
+                        <strong style="color:rgba(255,100,100,0.9);">Problème :</strong> Gestion appels, RDV, relances et admin en simultané<br>
+                        <strong style="color:#4ade80;">Solution :</strong> Créneau quotidien dédié à l'administratif
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <span style="background:rgba(255,100,100,0.2); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-size:12px;">⚡</span>
+                        <div class="card-title" style="margin:0;">Découverte du besoin</div>
+                    </div>
+                    <div class="card-body">
+                        <strong style="color:rgba(255,100,100,0.9);">Problème :</strong> Rester trop sur la demande exprimée<br>
+                        <strong style="color:#4ade80;">Solution :</strong> Questionnement approfondi + reformulation systématique
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== SLIDE 15 – COMPÉTENCES ============================== -->
+<div class="slide" id="s15">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Partie IV – Bilan de compétences</div>
+            <div class="slide-title">Compétences <span class="yellow">développées</span></div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="four-col" style="flex:1; align-items:start;">
+        <div class="skill-card">
+            <span class="skill-icon">🤝</span>
+            <div class="skill-name">Aisance relationnelle</div>
+            <div class="skill-desc">Gain en confiance, adaptation du discours selon le profil client, développement d'une posture professionnelle en B2B</div>
+        </div>
+        <div class="skill-card">
+            <span class="skill-icon">🔍</span>
+            <div class="skill-name">Découverte & qualification du besoin</div>
+            <div class="skill-desc">Écoute active, questions pertinentes, reformulation, transformation d'un échange en information commerciale exploitable</div>
+        </div>
+        <div class="skill-card">
+            <span class="skill-icon">📅</span>
+            <div class="skill-name">Organisation & gestion des priorités</div>
+            <div class="skill-desc">Tournées optimisées par zone, gestion multi-tâches (terrain, phoning, admin), créneau dédié administration</div>
+        </div>
+        <div class="skill-card">
+            <span class="skill-icon">📈</span>
+            <div class="skill-name">Vision commerciale globale</div>
+            <div class="skill-desc">Coordination équipes, logique omnicanale, compréhension que la performance repose sur l'accompagnement autant que la vente</div>
+        </div>
+    </div>
+
+    <div style="margin-top:16px; background:rgba(255,229,0,0.08); border:1px solid rgba(255,229,0,0.2); border-radius:12px; padding:14px 20px; font-size:13px; color:rgba(255,255,255,0.85); text-align:center; line-height:1.7;">
+        <strong style="color:var(--metro-yellow);">Analyse réflexive :</strong> Cette mission m'a montré que créer de la valeur commence bien avant la vente : dans la manière d'entrer en relation, de comprendre le client et de construire une réponse adaptée. Mon rôle, même au début du parcours commercial, est loin d'être secondaire.
+    </div>
+</div>
+
+<!-- ============================== SLIDE 16 – CONCLUSION ============================== -->
+<div class="slide" id="s16">
+    <div class="slide-header">
+        <div class="slide-header-left">
+            <div class="slide-section">Conclusion & Perspectives</div>
+            <div class="slide-title">Réponse à la <span class="yellow">problématique</span></div>
+        </div>
+        <div class="slide-header-logo">METRO CAC</div>
+    </div>
+
+    <div class="two-col" style="flex:1; align-items:start;">
+        <!-- CONCLUSION -->
+        <div>
+            <div class="card-title" style="margin-bottom:12px;">L'omnicanalité : levier de fidélisation en contexte inflationniste</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                    <span style="color:var(--metro-yellow); font-size:18px; margin-top:1px;">→</span>
+                    <div style="font-size:13px; color:rgba(255,255,255,0.85); line-height:1.5;">Halle + Livraison + Clic & Retrait + MarketPlace + Application = <strong style="color:white;">1 écosystème complet</strong></div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                    <span style="color:var(--metro-yellow); font-size:18px; margin-top:1px;">→</span>
+                    <div style="font-size:13px; color:rgba(255,255,255,0.85); line-height:1.5;">DISH : METRO devient <strong style="color:white;">partenaire de gestion</strong> — approvisionnement, encaissement, visibilité, réservations</div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                    <span style="color:var(--metro-yellow); font-size:18px; margin-top:1px;">→</span>
+                    <div style="font-size:13px; color:rgba(255,255,255,0.85); line-height:1.5;"><strong style="color:white;">78%</strong> des dirigeants TPE-PME voient le numérique comme un bénéfice réel (France Num)</div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                    <span style="color:var(--metro-yellow); font-size:18px; margin-top:1px;">→</span>
+                    <div style="font-size:13px; color:rgba(255,255,255,0.85); line-height:1.5;">On passe d'une logique de <strong style="color:white;">fournisseur</strong> à une logique de <strong style="color:var(--metro-yellow);">partenaire commercial</strong></div>
+                </div>
+            </div>
+            <div style="background:var(--metro-yellow); color:var(--metro-blue); border-radius:12px; padding:14px 18px; font-size:14px; font-weight:800; text-align:center; line-height:1.5;">
+                "En période inflationniste, l'omnicanalité n'est pas un outil de confort,<br>c'est un véritable levier commercial de fidélisation."
+            </div>
+        </div>
+
+        <!-- PERSPECTIVES -->
+        <div>
+            <div class="card-title" style="margin-bottom:12px;">Perspectives — Master 2026–2027</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.65); margin-bottom:14px;">
+                Je poursuis en <strong style="color:white;">Master au CFA METRO</strong> — Halle de Portet-sur-Garonne & Toulouse
+            </div>
+
+            <div class="axe-item">
+                <div class="axe-num">1</div>
+                <div class="axe-text">
+                    <strong style="color:white;">Améliorer le taux de transformation</strong><br>
+                    Objectif &gt;35% — Phase de découverte client renforcée + gestion des objections
+                </div>
+            </div>
+            <div class="axe-item">
+                <div class="axe-num">2</div>
+                <div class="axe-text">
+                    <strong style="color:white;">Maîtriser et vendre l'offre omnicanale</strong><br>
+                    DISH, livraison, MarketPlace, MPM/PMM — discours adapté à chaque profil
+                </div>
+            </div>
+            <div class="axe-item">
+                <div class="axe-num">3</div>
+                <div class="axe-text">
+                    <strong style="color:white;">Piloter la data commerciale</strong><br>
+                    Exports SAM, suivi des visites, tableaux de bord FDV — outil de performance terrain
+                </div>
+            </div>
+
+            <div style="margin-top:14px; text-align:center; font-size:12px; color:rgba(255,255,255,0.5);">
+                Alternance : 01/09/2025 – 31/08/2026 · Bachelor CAC · CFA METRO / Talis Business School
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /.slide-deck -->
+
+<!-- NAV -->
+<div class="nav-controls">
+    <button class="nav-btn" onclick="prevSlide()">←</button>
+    <span class="slide-counter"><span id="current">1</span> / <span id="total">16</span></span>
+    <button class="nav-btn" onclick="nextSlide()">→</button>
+</div>
+
+<script>
+let current = 1;
+const total = document.querySelectorAll('.slide').length;
+document.getElementById('total').textContent = total;
+
+function showSlide(n) {
+    if (n < 1) n = 1;
+    if (n > total) n = total;
+    current = n;
+    document.querySelectorAll('.slide').forEach((s, i) => {
+        s.classList.toggle('active', i === n - 1);
+    });
+    document.getElementById('current').textContent = n;
+    document.getElementById('progressBar').style.width = (n / total * 100) + '%';
+    if (n === 8 && !window.chartCreated) createBenchmarkChart();
+}
+
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+});
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-controls')) nextSlide();
+});
+
+function createBenchmarkChart() {
+    window.chartCreated = true;
+    const ctx = document.getElementById('benchmarkChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['METRO', 'Promocash', 'Pomona', 'Transgourmet', 'Sysco'],
+            datasets: [{
+                label: 'Panier (€ HT)',
+                data: [100, 97.99, 100.95, 102, 103],
+                backgroundColor: [
+                    'rgba(255,229,0,0.85)',
+                    'rgba(100,220,120,0.7)',
+                    'rgba(150,180,255,0.6)',
+                    'rgba(150,180,255,0.5)',
+                    'rgba(255,100,100,0.6)'
+                ],
+                borderColor: [
+                    '#FFE500',
+                    '#4ade80',
+                    '#818cf8',
+                    '#818cf8',
+                    '#f87171'
+                ],
+                borderWidth: 2,
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => ` ${ctx.raw.toFixed(2)} €`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    ticks: { color: 'rgba(255,255,255,0.75)', font: { size: 11 } }
+                },
+                y: {
+                    min: 95,
+                    max: 106,
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    ticks: {
+                        color: 'rgba(255,255,255,0.6)',
+                        font: { size: 10 },
+                        callback: (v) => v + ' €'
+                    }
+                }
+            }
+        }
+    });
+}
+
+showSlide(1);
+</script>
+</body>
+</html>
